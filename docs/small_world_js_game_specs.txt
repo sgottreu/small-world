@@ -1,0 +1,17 @@
+##Territories
+
+* Has a mountain, lair, fortification, heroic, dragon, hole-in-the-ground
+* Borders water
+* Borders mountain
+* Borders game board.
+* Swamp, farm, forest, magic, mine, Lost Tribe, hills, underworld
+
+##Race
+
+* Name
+* power
+
+##Player 
+
+* victory coins
+

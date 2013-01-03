@@ -1,0 +1,244 @@
+
+#General
+
+##Enemy Losses
+**Q:** Is there an order in which the tokens you lose from battles are redeployed at the end of the current players turn ? (in the case of multiple players having to redeploy tokens)
+
+**A:** Go in clockwise (player) order, from the active player on, if need be
+
+All active units destroyed
+If all your active units are destroyed in one turn you may:
+
+1. Score points only with the in-decline race.
+2. or Go into decline and score 0 for that turn.
+
+You may not take a new combo this turn
+
+##Troop Redeployment
+You must leave at least one race token in each region conquered at the end of your turn, except for the amazons. In this case you must take off four race tokens, abandoning regions you've just conquered if required.
+
+You can't swap active with decline races or vice versa. They are still 2 distinct races.
+
+##Non-Conquest Unit Placement
+**Q:** Do I have the ability the place tokens in my occupied territories without failing a reinforcement roll?
+
+**A:** Yes absolutely.
+
+##Tiebreak
+**Q:** Do Bivouacs count towards the tie breaker?
+
+**A:** No, they don't count toward the tie-break (they are race tokens for defense purposes, not for all purposes; just like the +4 Amazons would not count toward the tie-break).
+
+##3P Board
+On the south border, the right hand mountain is adjacent to the forest region.
+
+##New Active Race
+Your new race does not have to come onto the board in a region adjacent to your declined race.
+
+##Entering the board
+**Q:** Are you allowed to enter the board from more than one spot, provided you keep tokens in your hand?
+
+**A:** No, unless you are flying.
+
+
+#Races
+
+##Amazons
+The Amazons ability text should read: "So you start your initial turn with 10 Amazon tokens (plus any additional ones that may be granted to you by the Special Power associated with the Amazons, depending on your combo)."
+
+To clarify future turns, you pick up your Amazons from the board, add the 4 you set aside in the last turn, and then before the end of your turn, set 4 aside again.
+
+
+##Elves
+The elves ability text reads:
+"keep all your Elf tokens in hand for redeployment at the end of your turn"
+But should read:
+"keep all your Elf tokens in hand for redeployment at the end of the current player's turn"
+As clarified by the Enemy Losses & Withdrawls section:
+"Keep the other Race tokens in hand, and redeploy them 
+in any other Region(s) still occupied by his race (if any) as 
+the final action of the current player's turn."
+
+###Elves vs Sorcerer
+When the sorcerers substitute an elf token:
+The two tokens are switched, with the Elven token going back into the tray. This is the only way for Elves to lose tokens.
+
+
+##Giants
+**Q:** On the 4-player map, in the south-east corner there are two mountains that each border the same forest region. If a giant controls both regions, is it -2 tiles to attack that forest, or only -1?
+
+**A:** It is only -1, even if the Giants hold several mountain regions.
+
+###Giants with Flying
+**Q:** If I have Flying Giants, and I control 1 Mountain, then can I attack ANY region using the Giant's ability of -1 on attacks against regions adjacent to a mountian I contol?
+
+**A:** No, this is different. Flying does NOT make all the regions adjacent to each other. The Giants' ability only works against Regions that are physically adjacent to the Mountains they occupy.
+
+###Giants with Underworld
+**Q:** Are giants with underworld allowed to treat all underworld locations as "adjacent to mountain" if having at least one token on an underworld mountain space?
+
+**A:** Yes, because Underworld makes all Cave regions adjacent to each other.
+
+##Ghouls
+
+###Ghouls in-decline
+**Q:** With non-spirit Ghouls in decline and Elves as the active race. What sequence for the turn is used if Elves are put into decline?
+
+**A:** 1. Send Elves into decline (Removing all Ghouls from the board)
+2. Score VPs for Elves
+There is no attack phase for the in-decline Ghouls because there is only an attack phase in a turn if that turn is spent expanding, not going into decline with a race (your Elves, here).
+
+**Q:** Can in-decline Ghouls re-deploy before the active race tokens commence the "Ready your Troops" phase?
+
+**A:** Yes.
+
+**Q:** Do the conquests for both in-decline Ghouls and the active race end when the reinforcement die is used for the in-decline Ghouls?
+
+**A:** No, you play your in-decline Ghouls (including their last conquest with a reinforcement die roll, if any), then you play your active race (who may also have a reinforcement roll as part of their last conquest).
+
+**Q:** What happens to race tokens returned to your hand after being attacked by the in-decline Ghouls?
+
+**A:** The tokens are redeployed at the end of the current player's turn.
+
+If in-decline Ghoul tokens have been wiped off the board, they may re-enter it on the players next turn by conquering one of its border regions. 
+
+**Q:** When in-decline Ghoul tokens are attacked; Do they die similarly to active races (just lose 1 token per region) or do they get whiped out?
+
+**A:** Ghouls act like an active race when in decline, so would only lose 1 token per region lost.
+
+###Ghouls with Spirit
+**Q:** Can in-decline Spirit Ghouls re-enter the board into new regions?
+
+**A:** Yes, because they behave like an active race. This is true for Spirit Ghouls as well.
+
+###Ghouls with Seafaring
+In-decline Seafaring Ghouls cannot continue to conquer new lakes and seas.
+
+###Ghouls with Fortified
+In-decline fortified Ghouls cannot continue to place forts.
+
+
+##Halflings
+Holes-in-the-ground can only be placed in the first two regions you conquer, not on regions obtained during later conquest. So if you abandon these regions, the Holes-in-the-ground disappear for good.
+They cannot be re-used if the Halflings are forced to re-enter the map.
+
+##Sorcerer
+**Q:** For a Non-flying Sorcerers' first turn: Are they allowed to use their power to convert an opponent's sole token bordering the edge?
+
+**A:** No, Non-flying Sorcerers cannot use their special conquest to enter the board.
+
+**Q:** Can Sorcerers use their Ability after placing all their units?
+
+**A:** It depends what you mean. The Sorcerers cannot use their Ability after doing a final conquest for the turn using the Reinforcement die roll. But they can use their ability otherwise.
+
+**Q:** Can a non-Seafaring Sorcerer use its power to take a single token on a sea or lake?
+
+**A:** In order to use their token substitution power, the Sorcerers must still be able to conquer the region they target. Since only seafaring races can conquer Lakes & Seas, a (non-seafaring) sorcerer would not be able to conquer a Lake or Sea occupied by another (seafaring) token.
+
+**Q:** What does "Once per turn and per opponent" mean?
+
+**A:** It does means "once per opponent per turn", hence, you can use the power twice in a turn against 2 different opponents.
+
+The Sorcerer's power can not be used on the Lost Tribe tokens.
+
+###Sorcerers with Flying
+**Q:** For a flying Sorcerers' first turn: Are they allowed to use their power to convert an opponent's sole token bordering the edge?
+
+**A:** Yes, flying Sorcerers can use their special conquest to enter the board.
+
+**Q:** Can the Flying Sorcerers use their power in any region with a single opposing unit (no encampment, no sea or lake)? Or, does it still need to be an adjacent region?
+
+**A:** Flying Sorcerers can use their power in any region except seas, lakes, those with encampments, Heroes, a Dragon, holes in the ground, contains a lost-tribe race token or an oponent's in decline race token.
+
+###Sorcerer vs Diplomat
+The Sorcerer's substition power is an attack, so you couldn't use it against a Diplomat who picked you as his friend. 
+
+###Sorcerer vs Seafaring
+The Sorcerer can swap out a Seafaring token, but not in a water region. Converting a token is a conquest, and non-seafaring Sorcerers, like anyone else, cannot conquer water regions.
+
+##Tritons
+##Tritons with Seafaring
+**Q:** Do Seafaring Tritans receive a discount towards conquering the water Regions?
+
+**A:** No, the water Regions are not adjacent to water, and they receive no discount. The Tritons only get an attack discount on coastal regions, not the water regions themselves.
+
+#Special Powers
+
+##Berzerk
+You may roll the die *once* per attack. First, you roll the die.
+Then, you choose an adjacent territory. Then, you deploy your tokens.
+
+About the final roll, there is a very important sentence in the rulebook, in the "Berserk" section:
+"If you do not have enough tokens left, this is your final conquest attempt for the turn."
+This sentence means that there is no "end-turn" die.
+For each conquest, you roll the die and select your region: if you do not have enough tokens left, then your turn is over. You are not allowed to re-roll the die.
+
+##Bivouacking
+English rules should read: ...thereby also protecting a single Race token with an Encampment from the Sorcerer's Racial Power.
+
+More specifically, a single race token with an encampment in the same region is protected from the Sorcerer using its racial power, because the encampment counts as a second race token in the region in this case.
+The region would remain vulnerable to any race (including Sorcerers) with the Dragon Master power, however.
+
+Camps protect a single unit from the sorcerer's power.
+You can't leave an encampment alone, with no race token.
+
+**Q:** What exactly does "encampments are never lost during an attack" mean? That the one with the bivouacking skill is able to take it back in their hand right away? To immediately redeploy? Or to do so on their next turn?
+
+**A:** Since they count 'as race tokens', if a region with the encampment tokens is captured, they're pulled back to the player's hand and redeployed during the cleanup phase of the attacker's turn.
+
+##Commando
+English rules should read: Each conquer requires 1 less Race token than normal. A minimum of 1 token is still required.
+Therefore, when your active tokens are not on the board, for the first conquest, you do get the Commando bonus.
+
+##Diplomat
+**Q:** Is a race with the Diplomat power allowed to nominate a player, who has just declined or who has not yet had a turn (and therefore has no active race) as an ally?
+
+**A:** Yes indeed, the only restriction in the choice of an ally is that you cannot choose a player if you just attacked his active race.
+
+Diplomat prevents from attacks of any kind (Dragon, Sorcerer, etc.) A Diplomat Race is immune to her ally's conquests & racial & special powers.
+
+##Dragon
+**Q:** Can the dragon fly, or just attack adjacent squares?
+
+**A:** A Dragon does not give the race flying, nor does it fly itself. Also the dragon does not do the attacking, it just enables a single race token to take over a region. The dragon then occupies the region with that single race token until the next turn.
+Hence the picture of a walking dragon.
+
+**Q:** Can Dragon Master be used to enter the board?
+
+**A:** The English rules are correct as stated. You may use your Dragon's power to enter the board.
+
+##Flying
+**Q:** Can a Flying race conquer a lake?
+
+**A:** No. The English rules should read: ".. Seas and Lakes."
+
+The "Flying" ability allows you to ignore the adjacency rule for your conquests.
+
+If you have the Flying special power, you may use it to enter the board through a non border territory.
+
+##Fortified
+Clarification of "leave" vs "abandon"
+In fact, leave refers to the turn where you are entering in decline.
+You should understand the following:"The Fortress also augments your Region's defense by 1 (just as if you had an additional Race token stationed there), even if you are entering or are in decline.
+
+In-decline races cannot continue to place fortifications.
+
+**Q:** Once a fortress is placed, can it be moved like an encampment? Or is it stuck there until the region is abandoned or conquered?
+
+**A:** A fortress cannot be moved. 
+
+**Q:** When a race with fortifications goes into decline, the fortress remains behind. If that tile is then conquered by another player, does the fortress stay on the board?
+
+**A:** Nope. The fortress must be removed when the region is abandoned or conquered by an opponent.
+
+##Heroic
+**Q:** Do Heroic Heroes need to be moved every turn?
+
+**A:** There is no need to move them from one turn to the next.
+
+##Seafaring
+Since only seafaring races can conquer Lakes & Seas, a (non-seafaring) race would not be able to conquer a Lake or Sea occupied by another (seafaring) token.
+
+**Q:** Can a Seafaring race do a first conquest on a border sea region?
+
+**A:** Yes.
