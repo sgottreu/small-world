@@ -1,32 +1,63 @@
 class Territory
 
-  constructor: (@data) ->
-    @id=0
-    @mountain=false
-    @waterBorder=false
-    @mountainBorder=false
-    @isWater = false
-    @isMine = false
-    @isMagic = false
-    @isUnderworld = false
-    @edgeBorder=false
-    @type=''
-    @lostTribe=false
-    @lair=false
-    @fort=false
-    @biovauk=false
-    @numBiovauk=0
-    @herioc=false
-    @dragon=false
-    @holeInTheGround=false
+    constructor: (@data) ->
+        @id=0
+        @adjacent = new Array()
+        @mountain=false
+        @waterBorder=false
+        @mountainBorder=false
+        @isWater = false
+        @isMine = false
+        @isMagic = false
+        @isUnderworld = false
+        @edgeBorder=false
+        @type=''
+        @lostTribe=false
+        @lair=false
+        @fort=false
+        @biovauk=false
+        @numBiovauk=0
+        @herioc=false
+        @dragon=false
+        @holeInTheGround=false
+        
+        @totalTokens = 0
+    
+        for key, value of @data
+            this[key] = value
+        @data = null
+    
+    set: ->
+    
+    tokensNeeded: ->
+        needed = 2
+        if(this.mountain) 
+            needed++
+        if(this.lostTribe)
+            needed++
+        if(this.lair)
+            needed++
+        if(this.fort)
+            needed++
+            
+        needed = needed + this.numBiovauk
+        
+        needed
+        
+    isAdjacent: (territory)->
+        
+        for item, i in this.adjacent
+            for terr, t in territory
+                if item == terr.id
+                    return true
+        return false
 
-    for key, value of @data
-        this[key] = value
-    @data = null
+        
+        
 
 window.territories = [
     new Territory { id: 1, type:'water', mountain:false, waterBorder:false, mountainBorder:true, edgeBorder:true, isWater:true, isMine:false, isMagic:false, isUnderworld:false, lostTribe:false, adjacent: [2,6]}
-    new Territory { id:2, type: 'farm', waterBorder: true, mountainBorder:true, edgeBorder:true, isMagic: true, adjacent: [1,3,6,7]}
+    new Territory { id:2, type: 'farm', waterBorder: true, mountainBorder:true, edgeBorder:true, isMagic: true, adjacent: [1,3,6,7], numBiovauk: 12}
     new Territory {id:3, type:'forest', isMine:true, waterBorder: true, mountainBorder:true, edgeBorder:true, adjacent: [2,4,7,8,9] }
     new Territory {id:4, type:'swamp', mountain:false, waterBorder:false, mountainBorder:true, edgeBorder:true, isWater:false, isMine:false, isMagic:false, isUnderworld:true, lostTribe:true, adjacent: [3,5,9,10]}
     new Territory {id:5, type:'hill', mountain:false, waterBorder:false, mountainBorder:false, edgeBorder:true, isWater:false, isMine:false, isMagic:false, isUnderworld:false, lostTribe:false, adjacent: [4,10,11]}
@@ -50,3 +81,4 @@ window.territories = [
     new Territory {id:23, type:'water', mountain:false, waterBorder:false, mountainBorder:true, edgeBorder:true, isWater:true, isMine:false, isMagic:false, isUnderworld:false, lostTribe:false, adjacent: [16,21,22]}
         
 ]
+

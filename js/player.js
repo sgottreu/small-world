@@ -7,11 +7,11 @@ Player = (function() {
     this.data = data;
     this.name = false;
     this.victoryPoints = 5;
-    this.territory = [];
-    this.civilizations = [];
+    this.territory = new Array();
+    this.civilizations = new Array();
     this.totalTerritories = 0;
     this.playerType = '';
-    this.hasPlayed = [];
+    this.hasPlayed = new Array();
     _ref = this.data;
     for (key in _ref) {
       value = _ref[key];

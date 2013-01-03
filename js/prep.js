@@ -1,7 +1,43 @@
 
 $(function() {
-  var gameRound, i, item, pickRacePower, setPlayerTable, showRacePowerStack, _i, _j, _len, _len1, _ref, _ref1,
+  var attackTerritory, changePlayer, i, item, pickRacePower, setPlayerTable, showRacePowerStack, updatePlayerTokens, _i, _j, _len, _len1, _ref, _ref1,
     _this = this;
+  updatePlayerTokens = function(j, r, needed) {
+    window.players[j].civilizations[r].totalTokens = window.players[j].civilizations[r].totalTokens - needed;
+    $("#playerTable tbody").find('[data-id="' + j + '"]').find('[data-td="tokens"]').html(window.players[j].civilizations[r].totalTokens);
+  };
+  attackTerritory = function(j, r, index) {
+    var needed;
+    if (window.players[j].civilizations[r].totalTokens === 0) {
+      changePlayer();
+      return false;
+    }
+    needed = window.territories[index].tokensNeeded();
+    console.log('Number of Tokens needed', needed);
+    if (needed <= window.players[j].civilizations[r].totalTokens) {
+      window.players[j].territory.push(window.territories[index]);
+      updatePlayerTokens(j, r, needed);
+      window.players[j].civilizations[r].startRound = false;
+      if (window.players[j].civilizations[r].totalTokens === 0) {
+        return changePlayer;
+      }
+    } else {
+      if (window.players[j].civilizations[r].totalTokens === 0) {
+        return changePlayer();
+      } else {
+        return alert('You do not have enough tokens to attack');
+      }
+    }
+  };
+  changePlayer = function() {
+    window.currentPlayer++;
+    if (window.currentPlayer > window.players.length) {
+      window.currentRound++;
+      return window.currentPlayer = 1;
+    } else {
+      return console.log('Current player is ' + window.players[window.currentPlayer - 1].name + '.');
+    }
+  };
   $('.map').maphilight(function() {
     return {
       fade: false
@@ -19,30 +55,26 @@ $(function() {
     data = $('#' + this.id).data('maphilight') || {};
     data.fillColor = "cccccc";
     return $('#' + this.id).data('maphilight', data);
-    /*
-            for key, value of territories[index].adjacent
-                
-                data = $('#territory-'+value).data('maphilight') || {}
-                data.fillColor = "ff0000"
-                $('#territory-'+value).data('maphilight', data)
-                
-                $('#territory-'+value).mouseover()
-    */
-
   });
   $(".territory").bind('dblclick', function() {
-    var id, index;
+    var id, index, j, r;
     id = this.id.split("-");
     index = parseInt(id[1] - 1);
-    /*
-            for key, value of territories[index].adjacent
-                data = $('#territory-'+value).data('maphilight') || {}
-                data.fillColor = "cccccc"
-                $('#territory-'+value).data('maphilight', data)
-    */
-
-    if (window.currentRound === 1) {
+    j = window.currentPlayer - 1;
+    r = window.players[j].civilizations.length - 1;
+    if (window.players[j].civilizations[r].startRound) {
+      if (window.territories[index].edgeBorder) {
+        attackTerritory(j, r, index);
+      } else {
+        alert('You must chose a territory on the edge.');
+      }
       return true;
+    } else {
+      if (window.territories[index].isAdjacent(window.players[j].territory)) {
+        return attackTerritory(j, r, index);
+      } else {
+        return alert('That territory is not adjacent.');
+      }
     }
   });
   showRacePowerStack = function(stack, num) {
@@ -63,9 +95,9 @@ $(function() {
     showRacePowerStack(item, i);
   }
   setPlayerTable = function(item, i) {
-    $("#playerTable").find('tbody:last').append('<tr data-id="' + i + '"><td>' + item.name + '</td><td>' + item.victoryPoints + '</td><td data-td="race_power"></td><td></td></tr>');
+    $("#playerTable").find('tbody:last').append('<tr data-id="' + i + '"><td>' + item.name + '</td><td>' + item.victoryPoints + '</td><td data-td="race_power"></td><td data-td="tokens"></td></tr>');
   };
-  gameRound = 10;
+  window.gameRound = 10;
   window.currentRound = 1;
   window.currentPlayer = 1;
   window.canPickRace = true;
@@ -77,8 +109,7 @@ $(function() {
   pickRacePower = function(row) {
     var id, j, _k, _len2, _ref2;
     id = $(row).data("id");
-    j = currentPlayer - 1;
-    console.log($("#card-stack tbody").find('[data-id="' + id + '"]').index());
+    j = window.currentPlayer - 1;
     if ($("#card-stack tbody").find('[data-id="' + id + '"]').index() > window.players[j].victoryPoints) {
       alert('You don\'t have enough Victory Points to choose that race.');
     }

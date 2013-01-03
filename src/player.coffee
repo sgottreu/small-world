@@ -2,11 +2,11 @@ class Player
     constructor: (@data) ->
         @name=false
         @victoryPoints=5
-        @territory=[]
-        @civilizations=[]
+        @territory= new Array()
+        @civilizations = new Array()
         @totalTerritories=0
         @playerType=''
-        @hasPlayed=[]
+        @hasPlayed= new Array()
     
         for key, value of @data
             this[key] = value

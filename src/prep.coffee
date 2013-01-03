@@ -1,4 +1,38 @@
 $ ->
+    updatePlayerTokens = (j,r,needed) ->
+        window.players[j].civilizations[r].totalTokens = window.players[j].civilizations[r].totalTokens - needed
+        $("#playerTable tbody").find('[data-id="'+j+'"]').find('[data-td="tokens"]').html(window.players[j].civilizations[r].totalTokens)
+        return 
+        
+    attackTerritory = (j,r,index) ->
+        if window.players[j].civilizations[r].totalTokens == 0
+            changePlayer()
+            return false
+            
+        needed = window.territories[index].tokensNeeded()
+        console.log('Number of Tokens needed', needed)
+        if needed <= window.players[j].civilizations[r].totalTokens
+            window.players[j].territory.push(window.territories[index])
+            updatePlayerTokens(j,r,needed)
+            window.players[j].civilizations[r].startRound = false
+            if window.players[j].civilizations[r].totalTokens == 0
+                changePlayer
+        else
+            if window.players[j].civilizations[r].totalTokens == 0
+                changePlayer()
+            else
+                alert('You do not have enough tokens to attack')
+    
+    changePlayer = () ->
+        
+        window.currentPlayer++
+        if(window.currentPlayer > window.players.length)
+            window.currentRound++
+            window.currentPlayer = 1
+        else
+            console.log('Current player is '+window.players[window.currentPlayer-1].name+'.')
+    
+
     $('.map').maphilight => {fade: false}
     $(".territory").bind 'hover', ->
         id = this.id.split("-")
@@ -11,26 +45,27 @@ $ ->
         data = $('#'+this.id).data('maphilight') || {}
         data.fillColor = "cccccc"
         $('#'+this.id).data('maphilight', data)
-        ###
-        for key, value of territories[index].adjacent
-            
-            data = $('#territory-'+value).data('maphilight') || {}
-            data.fillColor = "ff0000"
-            $('#territory-'+value).data('maphilight', data)
-            
-            $('#territory-'+value).mouseover()
-        ###
+
     $(".territory").bind 'dblclick', ->
         id = this.id.split("-")
         index = parseInt(id[1] - 1)
-        ###
-        for key, value of territories[index].adjacent
-            data = $('#territory-'+value).data('maphilight') || {}
-            data.fillColor = "cccccc"
-            $('#territory-'+value).data('maphilight', data)
-        ###            
-        if window.currentRound == 1
+        j = window.currentPlayer-1
+        r = window.players[j].civilizations.length - 1
+
+        if window.players[j].civilizations[r].startRound
+            
+            if window.territories[index].edgeBorder
+                attackTerritory(j,r,index)
+            else
+                alert('You must chose a territory on the edge.')
+            
             return true
+        else
+            if window.territories[index].isAdjacent(window.players[j].territory)
+                attackTerritory(j,r,index)
+            else
+                alert('That territory is not adjacent.')
+        
 
 
     showRacePowerStack = (stack,num) ->
@@ -47,10 +82,10 @@ $ ->
     (showRacePowerStack(item,i) for item, i in window.racePowerStack)
     
     setPlayerTable = (item, i) ->
-        $("#playerTable").find('tbody:last').append('<tr data-id="'+i+'"><td>'+item.name+'</td><td>'+item.victoryPoints+'</td><td data-td="race_power"></td><td></td></tr>')
+        $("#playerTable").find('tbody:last').append('<tr data-id="'+i+'"><td>'+item.name+'</td><td>'+item.victoryPoints+'</td><td data-td="race_power"></td><td data-td="tokens"></td></tr>')
         return
     
-    gameRound = 10
+    window.gameRound = 10
     
     window.currentRound = 1
     window.currentPlayer = 1
@@ -60,8 +95,7 @@ $ ->
 
     pickRacePower = (row) =>
         id = $(row).data("id")
-        j = currentPlayer-1
-        console.log($("#card-stack tbody").find('[data-id="'+id+'"]').index())
+        j = window.currentPlayer-1
         
         if $("#card-stack tbody").find('[data-id="'+id+'"]').index() > window.players[j].victoryPoints
             alert('You don\'t have enough Victory Points to choose that race.')
