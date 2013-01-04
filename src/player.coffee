@@ -7,6 +7,8 @@ class Player
         @totalTerritories=0
         @playerType=''
         @hasPlayed= new Array()
+        @canAttack = false
+        @canPickRace = true
     
         for key, value of @data
             this[key] = value

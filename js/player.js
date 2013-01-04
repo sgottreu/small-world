@@ -12,6 +12,8 @@ Player = (function() {
     this.totalTerritories = 0;
     this.playerType = '';
     this.hasPlayed = new Array();
+    this.canAttack = false;
+    this.canPickRace = true;
     _ref = this.data;
     for (key in _ref) {
       value = _ref[key];

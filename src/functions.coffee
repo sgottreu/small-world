@@ -13,4 +13,25 @@ window.fisherYates = (arr) ->
         arr[j] = tempi
     return arr
     
+window.rollDie = () ->
+    Die = Math.floor((Math.random() * 6) + 1)
+    if Die == 1
+        return 0
+    
+    else if Die == 2 
+        return 1
+    
+    else if Die == 3 
+        return 0
+    
+    else if Die == 4 
+        return 2
+    
+    else if Die == 5 
+        return 0
+    
+    else if Die == 6 
+        return 3
+    
+    
 

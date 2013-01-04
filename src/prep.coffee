@@ -1,72 +1,117 @@
 $ ->
+    ###
+    
+         Global Variables
+    
+    ###
+
+    window.gameRound = 10
+    
+    window.currentRound = 1
+    window.currentPlayer = 1
+    window.canPickRace = true
+    
+    ###
+    
+         General Functions
+    
+    ###
+    
+    aiTurn = () ->
+        j = window.currentPlayer-1
+        
+    
+        if window.window.players[j].canPickRace
+            race = Math.floor((Math.random() * 6) + 1)
+            pickRacePower(race)
+            
+        r = window.players[j].civilizations.length-1
+            
+        while window.players[j].canAttack == true
+        
+            pick = Math.floor((Math.random() * (window.territories.length-1)) + 1)            
+            console.log(pick)           
+            territoryAttack(j,r,pick)
+    
+    
     updatePlayerTokens = (j,r,needed) ->
         window.players[j].civilizations[r].totalTokens = window.players[j].civilizations[r].totalTokens - needed
         $("#playerTable tbody").find('[data-id="'+j+'"]').find('[data-td="tokens"]').html(window.players[j].civilizations[r].totalTokens)
+        
+        if window.players[j].civilizations[r].totalTokens == 0
+            changePlayer()
+        
         return 
         
+    setTerritoryForPlayer = (j,r,index,tokens) ->
+        window.territories[index].playerTokens = tokens
+        
+        window.territories[index].playerId = j
+        window.territories[index].playerTerritory = window.players[j].territory.length
+        
+        window.players[j].territory.push(window.territories[index])
+        
+        console.log(window.players[j].territory[window.territories[index].playerTerritory])
+    
+    
+        
     attackTerritory = (j,r,index) ->
+        
+    
         if window.players[j].civilizations[r].totalTokens == 0
             changePlayer()
             return false
+        
+        console.log(window.players[j].name+' is attacking territory: '+window.territories[index].id)
+        console.log('  Type is: '+window.territories[index].type)
+        console.log(window.players[j].name+' Current Tokens: ', window.players[j].civilizations[r].totalTokens)
             
         needed = window.territories[index].tokensNeeded()
-        console.log('Number of Tokens needed', needed)
+        console.log('Number of Tokens needed to attack', needed)
         if needed <= window.players[j].civilizations[r].totalTokens
-            window.players[j].territory.push(window.territories[index])
+            setTerritoryForPlayer(j,r,index,needed)
             updatePlayerTokens(j,r,needed)
-            window.players[j].civilizations[r].startRound = false
-            if window.players[j].civilizations[r].totalTokens == 0
-                changePlayer
+            
+            console.log(window.players[j].name+' now has Tokens: ', window.players[j].civilizations[r].totalTokens)
+            return true
         else
             if window.players[j].civilizations[r].totalTokens == 0
                 changePlayer()
+                return false
             else
-                alert('You do not have enough tokens to attack')
+                console.log(window.players[j].name+' is rolling the die')
+                dieRoll = window.rollDie()
+                console.log(window.players[j].name+' rolled a '+dieRoll)
+                
+                if needed <= window.players[j].civilizations[r].totalTokens + dieRoll
+                    setTerritoryForPlayer(j,r,index,window.players[j].civilizations[r].totalTokens)
+                    console.log('Roll was successful.')
+                    updatePlayerTokens(j,r,window.players[j].civilizations[r].totalTokens)                
+                    return true
+                else
+                    console.log(window.players[j].name+' failed the roll.')
+                    changePlayer()
+                    return false
+
+        
+        window.players[j].civilizations[r].startRound = false
     
     changePlayer = () ->
-        
+        window.players[window.currentPlayer-1].canAttack = false
         window.currentPlayer++
         if(window.currentPlayer > window.players.length)
             window.currentRound++
+            console.log('Starting Round '+window.currentRound)
+            
             window.currentPlayer = 1
-        else
+            window.players[window.currentPlayer-1].canAttack = true
             console.log('Current player is '+window.players[window.currentPlayer-1].name+'.')
+        else            
+            window.players[window.currentPlayer-1].canAttack = true
+            console.log('Current player is '+window.players[window.currentPlayer-1].name+'.')
+            if window.players[window.currentPlayer-1].playerType == 'ai'
+                aiTurn()
     
-
-    $('.map').maphilight => {fade: false}
-    $(".territory").bind 'hover', ->
-        id = this.id.split("-")
-        index = parseInt(id[1] - 1)
-        
-    $(".territory").bind 'click', ->
-        id = this.id.split("-")
-        index = parseInt(id[1] - 1)
-        
-        data = $('#'+this.id).data('maphilight') || {}
-        data.fillColor = "cccccc"
-        $('#'+this.id).data('maphilight', data)
-
-    $(".territory").bind 'dblclick', ->
-        id = this.id.split("-")
-        index = parseInt(id[1] - 1)
-        j = window.currentPlayer-1
-        r = window.players[j].civilizations.length - 1
-
-        if window.players[j].civilizations[r].startRound
-            
-            if window.territories[index].edgeBorder
-                attackTerritory(j,r,index)
-            else
-                alert('You must chose a territory on the edge.')
-            
-            return true
-        else
-            if window.territories[index].isAdjacent(window.players[j].territory)
-                attackTerritory(j,r,index)
-            else
-                alert('That territory is not adjacent.')
-        
-
 
     showRacePowerStack = (stack,num) ->
         if stack.race  
@@ -79,19 +124,12 @@ $ ->
             $("#card-stack tbody").find('[data-id="'+num+'"]').hide()
         return 
 
-    (showRacePowerStack(item,i) for item, i in window.racePowerStack)
+    
     
     setPlayerTable = (item, i) ->
         $("#playerTable").find('tbody:last').append('<tr data-id="'+i+'"><td>'+item.name+'</td><td>'+item.victoryPoints+'</td><td data-td="race_power"></td><td data-td="tokens"></td></tr>')
         return
     
-    window.gameRound = 10
-    
-    window.currentRound = 1
-    window.currentPlayer = 1
-    window.canPickRace = true
-    
-    (setPlayerTable(window.players[i], i)) for item, i in window.players 
 
     pickRacePower = (row) =>
         id = $(row).data("id")
@@ -115,14 +153,74 @@ $ ->
         $("#playerTable tbody").find('[data-id="'+j+'"]').find('[data-td="race_power"]').html(window.racePowerStack[id].race.name + ' - ' + window.racePowerStack[id].power.name)
         $("#playerTable tbody").find('[data-id="'+j+'"]').find('td:last').html(window.racePowerStack[id].totalTokens)
         
+        console.log(window.players[j].name + ' has chosen as their race: '+ window.racePowerStack[id].race.name)
+        console.log(window.players[j].name + ' has chosen as their power: '+ window.racePowerStack[id].power.name)
+        
         $("#card-stack tbody tr:eq(5)").next().show()
 
         $(row).remove()
         window.racePowerStack[id].delete
-        window.canPickRace = false
+        window.window.players[j].canPickRace = false
+        
+        
+    territoryAttack = (j,r,index) =>
+        if window.players[j].civilizations[r].startRound
+            
+            if window.territories[index].edgeBorder
+                window.players[j].canAttack = attackTerritory(j,r,index)
+            else
+                console.log('You must chose a territory on the edge.')
+                return false
+            
+
+        else
+            if window.territories[index].isAdjacent(window.players[j].territory)
+                window.players[j].canAttack = attackTerritory(j,r,index)
+            else
+                console.log('That territory is not adjacent.') 
+                return false
+        
+
+    ###
+    
+         Loops to Build things
+    
+    ###
+
+    (setPlayerTable(window.players[i], i)) for item, i in window.players 
+    
+    (showRacePowerStack(item,i) for item, i in window.racePowerStack)
+
+
+    ###
+         
+         jQuery UI functions
+         
+    ###
+ 
+    $('.map').maphilight => {fade: false}
+    $(".territory").bind 'hover', ->
+        id = this.id.split("-")
+        index = parseInt(id[1] - 1)
+        
+    $(".territory").bind 'click', ->
+        id = this.id.split("-")
+        index = parseInt(id[1] - 1)
+        
+        data = $('#'+this.id).data('maphilight') || {}
+        data.fillColor = "cccccc"
+        $('#'+this.id).data('maphilight', data)
+
+    $(".territory").bind 'dblclick', ->
+        id = this.id.split("-")
+        index = parseInt(id[1] - 1)
+        j = window.currentPlayer-1
+        r = window.players[j].civilizations.length - 1
+
+        territoryAttack(j,r,index)
         
     $("#card-stack tbody tr").bind 'click', ->
-        if window.canPickRace
+        if window.window.players[window.currentPlayer-1].canPickRace
             pickRacePower(this)
         else 
             alert('You have already picked a race this round.')

@@ -25,6 +25,9 @@ Territory = (function() {
     this.dragon = false;
     this.holeInTheGround = false;
     this.totalTokens = 0;
+    this.playerTokens = 0;
+    this.playerId = false;
+    this.playerTerritory = false;
     _ref = this.data;
     for (key in _ref) {
       value = _ref[key];
@@ -38,6 +41,7 @@ Territory = (function() {
   Territory.prototype.tokensNeeded = function() {
     var needed;
     needed = 2;
+    needed = needed + this.playerTokens;
     if (this.mountain) {
       needed++;
     }
@@ -94,8 +98,7 @@ window.territories = [
     mountainBorder: true,
     edgeBorder: true,
     isMagic: true,
-    adjacent: [1, 3, 6, 7],
-    numBiovauk: 12
+    adjacent: [1, 3, 6, 7]
   }), new Territory({
     id: 3,
     type: 'forest',
