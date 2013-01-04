@@ -19,10 +19,11 @@ $ ->
     
     aiTurn = () ->
         j = window.currentPlayer-1
-        
     
         if window.window.players[j].canPickRace
             race = Math.floor((Math.random() * 6) + 1)
+            while window.racePowerStack[race] == 'undefined'
+                race = Math.floor((Math.random() * 6) + 1)
             pickRacePower(race)
             
         r = window.players[j].civilizations.length-1
@@ -39,7 +40,9 @@ $ ->
         $("#playerTable tbody").find('[data-id="'+j+'"]').find('[data-td="tokens"]').html(window.players[j].civilizations[r].totalTokens)
         
         if window.players[j].civilizations[r].totalTokens == 0
-            changePlayer()
+            changePlayer(j,r)
+            
+        window.players[j].civilizations[r].startRound = false
         
         return 
         
@@ -59,7 +62,7 @@ $ ->
         
     
         if window.players[j].civilizations[r].totalTokens == 0
-            changePlayer()
+            changePlayer(j,r)
             return false
         
         console.log(window.players[j].name+' is attacking territory: '+window.territories[index].id)
@@ -76,7 +79,7 @@ $ ->
             return true
         else
             if window.players[j].civilizations[r].totalTokens == 0
-                changePlayer()
+                changePlayer(j,r)
                 return false
             else
                 console.log(window.players[j].name+' is rolling the die')
@@ -90,27 +93,44 @@ $ ->
                     return true
                 else
                     console.log(window.players[j].name+' failed the roll.')
-                    changePlayer()
+                    changePlayer(j,r)
                     return false
 
         
-        window.players[j].civilizations[r].startRound = false
+
     
-    changePlayer = () ->
-        window.players[window.currentPlayer-1].canAttack = false
+    changePlayer = (j,r) ->
+        window.players[j].canAttack = false
         window.currentPlayer++
+        
         if(window.currentPlayer > window.players.length)
             window.currentRound++
             console.log('Starting Round '+window.currentRound)
             
             window.currentPlayer = 1
-            window.players[window.currentPlayer-1].canAttack = true
-            console.log('Current player is '+window.players[window.currentPlayer-1].name+'.')
+            j = window.currentPlayer-1
+            console.log('Current player is '+window.players[j].name+'.')
+            prepForTurn(j,r)
         else            
-            window.players[window.currentPlayer-1].canAttack = true
-            console.log('Current player is '+window.players[window.currentPlayer-1].name+'.')
-            if window.players[window.currentPlayer-1].playerType == 'ai'
+            j = window.currentPlayer-1
+            
+            console.log('Current player is '+window.players[j].name+'.')
+            prepForTurn(j,r)
+            if window.players[j].playerType == 'ai'
                 aiTurn()
+    
+    prepForTurn = (j,r) ->
+        gatherTokens(j,r)
+        window.players[j].canAttack = true
+    
+    gatherTokens = (j,r) ->
+        if !window.window.players[j].canPickRace
+            for item, i in window.territories
+                if item.playerId == j
+                    tokens = parseInt(item.playerTokens) - 1
+                    window.players[j].civilizations[r].totalTokens = window.players[j].civilizations[r].totalTokens + tokens
+                    console.log('Pulling '+tokens+' tokens from territory '+item.id)
+            console.log(window.players[j].name+' has '+window.players[j].civilizations[r].totalTokens+' tokens')
     
 
     showRacePowerStack = (stack,num) ->
@@ -132,8 +152,13 @@ $ ->
     
 
     pickRacePower = (row) =>
-        id = $(row).data("id")
+        
         j = window.currentPlayer-1
+        
+        if window.players[j].playerType == 'ai'
+            row = $("#card-stack tbody").find('[data-id="'+row+'"]')
+
+        id = $(row).data("id")
         
         if $("#card-stack tbody").find('[data-id="'+id+'"]').index() > window.players[j].victoryPoints
             alert('You don\'t have enough Victory Points to choose that race.')
@@ -161,7 +186,7 @@ $ ->
         $(row).remove()
         window.racePowerStack[id].delete
         window.window.players[j].canPickRace = false
-        
+        console.log('Here is old race: '+window.racePowerStack[id])
         
     territoryAttack = (j,r,index) =>
         if window.players[j].civilizations[r].startRound
@@ -224,5 +249,7 @@ $ ->
             pickRacePower(this)
         else 
             alert('You have already picked a race this round.')
-        
+        return
+
+    return
         

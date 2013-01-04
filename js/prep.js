@@ -5,7 +5,7 @@ $(function() {
            Global Variables
   */
 
-  var aiTurn, attackTerritory, changePlayer, i, item, pickRacePower, setPlayerTable, setTerritoryForPlayer, showRacePowerStack, territoryAttack, updatePlayerTokens, _i, _j, _len, _len1, _ref, _ref1,
+  var aiTurn, attackTerritory, changePlayer, gatherTokens, i, item, pickRacePower, prepForTurn, setPlayerTable, setTerritoryForPlayer, showRacePowerStack, territoryAttack, updatePlayerTokens, _i, _j, _len, _len1, _ref, _ref1,
     _this = this;
   window.gameRound = 10;
   window.currentRound = 1;
@@ -21,6 +21,9 @@ $(function() {
     j = window.currentPlayer - 1;
     if (window.window.players[j].canPickRace) {
       race = Math.floor((Math.random() * 6) + 1);
+      while (window.racePowerStack[race] === 'undefined') {
+        race = Math.floor((Math.random() * 6) + 1);
+      }
       pickRacePower(race);
     }
     r = window.players[j].civilizations.length - 1;
@@ -36,8 +39,9 @@ $(function() {
     window.players[j].civilizations[r].totalTokens = window.players[j].civilizations[r].totalTokens - needed;
     $("#playerTable tbody").find('[data-id="' + j + '"]').find('[data-td="tokens"]').html(window.players[j].civilizations[r].totalTokens);
     if (window.players[j].civilizations[r].totalTokens === 0) {
-      changePlayer();
+      changePlayer(j, r);
     }
+    window.players[j].civilizations[r].startRound = false;
   };
   setTerritoryForPlayer = function(j, r, index, tokens) {
     window.territories[index].playerTokens = tokens;
@@ -49,7 +53,7 @@ $(function() {
   attackTerritory = function(j, r, index) {
     var dieRoll, needed;
     if (window.players[j].civilizations[r].totalTokens === 0) {
-      changePlayer();
+      changePlayer(j, r);
       return false;
     }
     console.log(window.players[j].name + ' is attacking territory: ' + window.territories[index].id);
@@ -64,7 +68,7 @@ $(function() {
       return true;
     } else {
       if (window.players[j].civilizations[r].totalTokens === 0) {
-        changePlayer();
+        changePlayer(j, r);
         return false;
       } else {
         console.log(window.players[j].name + ' is rolling the die');
@@ -77,28 +81,48 @@ $(function() {
           return true;
         } else {
           console.log(window.players[j].name + ' failed the roll.');
-          changePlayer();
+          changePlayer(j, r);
           return false;
         }
       }
     }
-    return window.players[j].civilizations[r].startRound = false;
   };
-  changePlayer = function() {
-    window.players[window.currentPlayer - 1].canAttack = false;
+  changePlayer = function(j, r) {
+    window.players[j].canAttack = false;
     window.currentPlayer++;
     if (window.currentPlayer > window.players.length) {
       window.currentRound++;
       console.log('Starting Round ' + window.currentRound);
       window.currentPlayer = 1;
-      window.players[window.currentPlayer - 1].canAttack = true;
-      return console.log('Current player is ' + window.players[window.currentPlayer - 1].name + '.');
+      j = window.currentPlayer - 1;
+      console.log('Current player is ' + window.players[j].name + '.');
+      return prepForTurn(j, r);
     } else {
-      window.players[window.currentPlayer - 1].canAttack = true;
-      console.log('Current player is ' + window.players[window.currentPlayer - 1].name + '.');
-      if (window.players[window.currentPlayer - 1].playerType === 'ai') {
+      j = window.currentPlayer - 1;
+      console.log('Current player is ' + window.players[j].name + '.');
+      prepForTurn(j, r);
+      if (window.players[j].playerType === 'ai') {
         return aiTurn();
       }
+    }
+  };
+  prepForTurn = function(j, r) {
+    gatherTokens(j, r);
+    return window.players[j].canAttack = true;
+  };
+  gatherTokens = function(j, r) {
+    var i, item, tokens, _i, _len, _ref;
+    if (!window.window.players[j].canPickRace) {
+      _ref = window.territories;
+      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+        item = _ref[i];
+        if (item.playerId === j) {
+          tokens = parseInt(item.playerTokens) - 1;
+          window.players[j].civilizations[r].totalTokens = window.players[j].civilizations[r].totalTokens + tokens;
+          console.log('Pulling ' + tokens + ' tokens from territory ' + item.id);
+        }
+      }
+      return console.log(window.players[j].name + ' has ' + window.players[j].civilizations[r].totalTokens + ' tokens');
     }
   };
   showRacePowerStack = function(stack, num) {
@@ -118,8 +142,11 @@ $(function() {
   };
   pickRacePower = function(row) {
     var i, id, item, j, _i, _len, _ref;
-    id = $(row).data("id");
     j = window.currentPlayer - 1;
+    if (window.players[j].playerType === 'ai') {
+      row = $("#card-stack tbody").find('[data-id="' + row + '"]');
+    }
+    id = $(row).data("id");
     if ($("#card-stack tbody").find('[data-id="' + id + '"]').index() > window.players[j].victoryPoints) {
       alert('You don\'t have enough Victory Points to choose that race.');
     }
@@ -146,7 +173,8 @@ $(function() {
     $("#card-stack tbody tr:eq(5)").next().show();
     $(row).remove();
     window.racePowerStack[id]["delete"];
-    return window.window.players[j].canPickRace = false;
+    window.window.players[j].canPickRace = false;
+    return console.log('Here is old race: ' + window.racePowerStack[id]);
   };
   territoryAttack = function(j, r, index) {
     if (window.players[j].civilizations[r].startRound) {
@@ -211,11 +239,11 @@ $(function() {
     r = window.players[j].civilizations.length - 1;
     return territoryAttack(j, r, index);
   });
-  return $("#card-stack tbody tr").bind('click', function() {
+  $("#card-stack tbody tr").bind('click', function() {
     if (window.window.players[window.currentPlayer - 1].canPickRace) {
-      return pickRacePower(this);
+      pickRacePower(this);
     } else {
-      return alert('You have already picked a race this round.');
+      alert('You have already picked a race this round.');
     }
   });
 });
