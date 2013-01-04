@@ -9,6 +9,7 @@ class Player
         @hasPlayed= new Array()
         @canAttack = false
         @canPickRace = true
+        @color = ''
     
         for key, value of @data
             this[key] = value
@@ -21,6 +22,6 @@ class Player
         
         
 window.players = [
-    new Player { name: 'Me', playerType: 'person'}
-    new Player { name: 'HAL 2000', playerType: 'ai'}
+    new Player { name: 'Me', playerType: 'person', color: '#00f'}
+    new Player { name: 'HAL 2000', playerType: 'ai', color: '#0f0'}
 ]

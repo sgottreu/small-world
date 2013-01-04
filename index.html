@@ -1,8 +1,6 @@
 <html>
   <head>
-    <script src='js/underscore.js'></script>
     <script src='http://code.jquery.com/jquery-1.8.3.min.js'></script>
-    <script src='js/jquery.maphilight.min.js'></script>
     <script src='js/functions.js'></script>
     <script src='js/race.js'></script>
     <script src='js/territory.js'></script>
@@ -10,9 +8,12 @@
     <script src='js/player.js'></script>
     <script src='js/civilization.js'></script>
     <script src='js/prep.js'></script>
+    <link href='css/style.css' rel='stylesheet' type='text/css'>
   </head>
   <body>
-    <img border='0' class='map' height='1536' src='images/map.jpg' usemap='#map' width='2048'>
+    <canvas height='1536' id='map' width='2048'></canvas>
+    <img border='0' class='map' height='1536' src='images/map.jpg' width='2048'>
+    <img border='0' class='map clear' height='1536' src='images/clear.png' usemap='#map' width='2048'>
     <table border='1' id='card-stack'>
       <thead>
         <tr>
@@ -54,24 +55,24 @@
       <area class='territory' coords='1601,879,1775,789,1850,873,1896,917,1862,997,1828,1044,1745,1067,1685,1067,1628,994' data-maphilight='{"strokeColor":"0000ff","strokeWidth":5,"fillColor":"cccccc","fillOpacity":0.6}' id='territory-22' shape='poly'>
       <area class='territory' coords='1532,1239,1602,1146,1640,1082,1678,1068,1767,1060,1847,1025,1895,922,1956,904,2013,906,2030,1221' data-maphilight='{"strokeColor":"0000ff","strokeWidth":5,"fillColor":"cccccc","fillOpacity":0.6}' id='territory-23' shape='poly'>
     </map>
+    <table border='1' id='playerTable'>
+      <thead>
+        <tr>
+          <th>
+            Player
+          </th>
+          <th>
+            Points
+          </th>
+          <th>
+            Race/Power
+          </th>
+          <th>
+            Strength
+          </th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
   </body>
-  <table border='1' id='playerTable'>
-    <thead>
-      <tr>
-        <th>
-          Player
-        </th>
-        <th>
-          Points
-        </th>
-        <th>
-          Race/Power
-        </th>
-        <th>
-          Strength
-        </th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
 </html>

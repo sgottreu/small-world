@@ -33,5 +33,21 @@ window.rollDie = () ->
     else if Die == 6 
         return 3
     
-    
 
+window.colorTerritory = (color, poly) ->
+
+    console.log(window.document.getElementById("map"))
+    canvas=window.document.getElementById("map")
+    ctx = canvas.getContext('2d')
+    ctx.fillStyle = color
+    ctx.globalAlpha = 0.30
+    
+    ctx.beginPath()
+    ctx.moveTo(poly[0], poly[1])
+    
+    (ctx.lineTo( poly[num] , poly[num+1] )) for num in [2..poly.length-1] by 2
+
+    ctx.closePath()
+    ctx.fill()
+    return true    
+    

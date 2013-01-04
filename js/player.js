@@ -14,6 +14,7 @@ Player = (function() {
     this.hasPlayed = new Array();
     this.canAttack = false;
     this.canPickRace = true;
+    this.color = '';
     _ref = this.data;
     for (key in _ref) {
       value = _ref[key];
@@ -39,9 +40,11 @@ Player = (function() {
 window.players = [
   new Player({
     name: 'Me',
-    playerType: 'person'
+    playerType: 'person',
+    color: '#00f'
   }), new Player({
     name: 'HAL 2000',
-    playerType: 'ai'
+    playerType: 'ai',
+    color: '#0f0'
   })
 ];

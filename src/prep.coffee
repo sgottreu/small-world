@@ -22,7 +22,8 @@ $ ->
     
         if window.window.players[j].canPickRace
             race = Math.floor((Math.random() * 6) + 1)
-            while window.racePowerStack[race] == 'undefined'
+            console.log(window.racePowerStack[race])
+            while window.racePowerStack[race] == null
                 race = Math.floor((Math.random() * 6) + 1)
             pickRacePower(race)
             
@@ -40,7 +41,8 @@ $ ->
         $("#playerTable tbody").find('[data-id="'+j+'"]').find('[data-td="tokens"]').html(window.players[j].civilizations[r].totalTokens)
         
         if window.players[j].civilizations[r].totalTokens == 0
-            changePlayer(j,r)
+            next = changePlayer(j,r)
+            checkAI(next)
             
         window.players[j].civilizations[r].startRound = false
         
@@ -53,16 +55,14 @@ $ ->
         window.territories[index].playerTerritory = window.players[j].territory.length
         
         window.players[j].territory.push(window.territories[index])
-        
-        console.log(window.players[j].territory[window.territories[index].playerTerritory])
-    
-    
+  
         
     attackTerritory = (j,r,index) ->
         
     
         if window.players[j].civilizations[r].totalTokens == 0
-            changePlayer(j,r)
+            next = changePlayer(j,r)
+            checkAI(next)
             return false
         
         console.log(window.players[j].name+' is attacking territory: '+window.territories[index].id)
@@ -79,7 +79,8 @@ $ ->
             return true
         else
             if window.players[j].civilizations[r].totalTokens == 0
-                changePlayer(j,r)
+                next = changePlayer(j,r)
+                checkAI(next)
                 return false
             else
                 console.log(window.players[j].name+' is rolling the die')
@@ -93,17 +94,24 @@ $ ->
                     return true
                 else
                     console.log(window.players[j].name+' failed the roll.')
-                    changePlayer(j,r)
+                    next = changePlayer(j,r)
+                    checkAI(next)
                     return false
 
-        
+    checkAI = (j) ->
+        if window.players[j].playerType == 'ai'
+            aiTurn()
+            return true
+        return false
 
     
     changePlayer = (j,r) ->
-        window.players[j].canAttack = false
-        window.currentPlayer++
-        
+        window.players[j].canAttack = false        
+        console.log(window.players[j].name+' has completed their turn.')
+
+        window.currentPlayer++         
         if(window.currentPlayer > window.players.length)
+            console.log('Concluding Round '+window.currentRound)
             window.currentRound++
             console.log('Starting Round '+window.currentRound)
             
@@ -111,13 +119,13 @@ $ ->
             j = window.currentPlayer-1
             console.log('Current player is '+window.players[j].name+'.')
             prepForTurn(j,r)
-        else            
-            j = window.currentPlayer-1
-            
+        else     
+      
+            j = window.currentPlayer-1            
             console.log('Current player is '+window.players[j].name+'.')
             prepForTurn(j,r)
-            if window.players[j].playerType == 'ai'
-                aiTurn()
+        return j
+
     
     prepForTurn = (j,r) ->
         gatherTokens(j,r)
@@ -184,9 +192,9 @@ $ ->
         $("#card-stack tbody tr:eq(5)").next().show()
 
         $(row).remove()
-        window.racePowerStack[id].delete
+        window.racePowerStack[id] = null
         window.window.players[j].canPickRace = false
-        console.log('Here is old race: '+window.racePowerStack[id])
+        
         
     territoryAttack = (j,r,index) =>
         if window.players[j].civilizations[r].startRound
@@ -223,7 +231,8 @@ $ ->
          
     ###
  
-    $('.map').maphilight => {fade: false}
+    ###
+    $('.map').maphilight => {neverOn: true}
     $(".territory").bind 'hover', ->
         id = this.id.split("-")
         index = parseInt(id[1] - 1)
@@ -234,13 +243,18 @@ $ ->
         
         data = $('#'+this.id).data('maphilight') || {}
         data.fillColor = "cccccc"
+        data.alwaysOn = true
         $('#'+this.id).data('maphilight', data)
+    ###
 
     $(".territory").bind 'dblclick', ->
         id = this.id.split("-")
         index = parseInt(id[1] - 1)
         j = window.currentPlayer-1
         r = window.players[j].civilizations.length - 1
+        
+        coords = $(this).attr("coords").split(",");
+        window.colorTerritory(window.players[j].color, coords)
 
         territoryAttack(j,r,index)
         

@@ -5,7 +5,7 @@ $(function() {
            Global Variables
   */
 
-  var aiTurn, attackTerritory, changePlayer, gatherTokens, i, item, pickRacePower, prepForTurn, setPlayerTable, setTerritoryForPlayer, showRacePowerStack, territoryAttack, updatePlayerTokens, _i, _j, _len, _len1, _ref, _ref1,
+  var aiTurn, attackTerritory, changePlayer, checkAI, gatherTokens, i, item, pickRacePower, prepForTurn, setPlayerTable, setTerritoryForPlayer, showRacePowerStack, territoryAttack, updatePlayerTokens, _i, _j, _len, _len1, _ref, _ref1,
     _this = this;
   window.gameRound = 10;
   window.currentRound = 1;
@@ -21,7 +21,8 @@ $(function() {
     j = window.currentPlayer - 1;
     if (window.window.players[j].canPickRace) {
       race = Math.floor((Math.random() * 6) + 1);
-      while (window.racePowerStack[race] === 'undefined') {
+      console.log(window.racePowerStack[race]);
+      while (window.racePowerStack[race] === null) {
         race = Math.floor((Math.random() * 6) + 1);
       }
       pickRacePower(race);
@@ -36,10 +37,12 @@ $(function() {
     return _results;
   };
   updatePlayerTokens = function(j, r, needed) {
+    var next;
     window.players[j].civilizations[r].totalTokens = window.players[j].civilizations[r].totalTokens - needed;
     $("#playerTable tbody").find('[data-id="' + j + '"]').find('[data-td="tokens"]').html(window.players[j].civilizations[r].totalTokens);
     if (window.players[j].civilizations[r].totalTokens === 0) {
-      changePlayer(j, r);
+      next = changePlayer(j, r);
+      checkAI(next);
     }
     window.players[j].civilizations[r].startRound = false;
   };
@@ -47,13 +50,13 @@ $(function() {
     window.territories[index].playerTokens = tokens;
     window.territories[index].playerId = j;
     window.territories[index].playerTerritory = window.players[j].territory.length;
-    window.players[j].territory.push(window.territories[index]);
-    return console.log(window.players[j].territory[window.territories[index].playerTerritory]);
+    return window.players[j].territory.push(window.territories[index]);
   };
   attackTerritory = function(j, r, index) {
-    var dieRoll, needed;
+    var dieRoll, needed, next;
     if (window.players[j].civilizations[r].totalTokens === 0) {
-      changePlayer(j, r);
+      next = changePlayer(j, r);
+      checkAI(next);
       return false;
     }
     console.log(window.players[j].name + ' is attacking territory: ' + window.territories[index].id);
@@ -68,7 +71,8 @@ $(function() {
       return true;
     } else {
       if (window.players[j].civilizations[r].totalTokens === 0) {
-        changePlayer(j, r);
+        next = changePlayer(j, r);
+        checkAI(next);
         return false;
       } else {
         console.log(window.players[j].name + ' is rolling the die');
@@ -81,30 +85,38 @@ $(function() {
           return true;
         } else {
           console.log(window.players[j].name + ' failed the roll.');
-          changePlayer(j, r);
+          next = changePlayer(j, r);
+          checkAI(next);
           return false;
         }
       }
     }
   };
+  checkAI = function(j) {
+    if (window.players[j].playerType === 'ai') {
+      aiTurn();
+      return true;
+    }
+    return false;
+  };
   changePlayer = function(j, r) {
     window.players[j].canAttack = false;
+    console.log(window.players[j].name + ' has completed their turn.');
     window.currentPlayer++;
     if (window.currentPlayer > window.players.length) {
+      console.log('Concluding Round ' + window.currentRound);
       window.currentRound++;
       console.log('Starting Round ' + window.currentRound);
       window.currentPlayer = 1;
       j = window.currentPlayer - 1;
       console.log('Current player is ' + window.players[j].name + '.');
-      return prepForTurn(j, r);
+      prepForTurn(j, r);
     } else {
       j = window.currentPlayer - 1;
       console.log('Current player is ' + window.players[j].name + '.');
       prepForTurn(j, r);
-      if (window.players[j].playerType === 'ai') {
-        return aiTurn();
-      }
     }
+    return j;
   };
   prepForTurn = function(j, r) {
     gatherTokens(j, r);
@@ -172,9 +184,8 @@ $(function() {
     console.log(window.players[j].name + ' has chosen as their power: ' + window.racePowerStack[id].power.name);
     $("#card-stack tbody tr:eq(5)").next().show();
     $(row).remove();
-    window.racePowerStack[id]["delete"];
-    window.window.players[j].canPickRace = false;
-    return console.log('Here is old race: ' + window.racePowerStack[id]);
+    window.racePowerStack[id] = null;
+    return window.window.players[j].canPickRace = false;
   };
   territoryAttack = function(j, r, index) {
     if (window.players[j].civilizations[r].startRound) {
@@ -213,30 +224,30 @@ $(function() {
            jQuery UI functions
   */
 
-  $('.map').maphilight(function() {
-    return {
-      fade: false
-    };
-  });
-  $(".territory").bind('hover', function() {
-    var id, index;
-    id = this.id.split("-");
-    return index = parseInt(id[1] - 1);
-  });
-  $(".territory").bind('click', function() {
-    var data, id, index;
-    id = this.id.split("-");
-    index = parseInt(id[1] - 1);
-    data = $('#' + this.id).data('maphilight') || {};
-    data.fillColor = "cccccc";
-    return $('#' + this.id).data('maphilight', data);
-  });
+  /*
+      $('.map').maphilight => {neverOn: true}
+      $(".territory").bind 'hover', ->
+          id = this.id.split("-")
+          index = parseInt(id[1] - 1)
+          
+      $(".territory").bind 'click', ->
+          id = this.id.split("-")
+          index = parseInt(id[1] - 1)
+          
+          data = $('#'+this.id).data('maphilight') || {}
+          data.fillColor = "cccccc"
+          data.alwaysOn = true
+          $('#'+this.id).data('maphilight', data)
+  */
+
   $(".territory").bind('dblclick', function() {
-    var id, index, j, r;
+    var coords, id, index, j, r;
     id = this.id.split("-");
     index = parseInt(id[1] - 1);
     j = window.currentPlayer - 1;
     r = window.players[j].civilizations.length - 1;
+    coords = $(this).attr("coords").split(",");
+    window.colorTerritory(window.players[j].color, coords);
     return territoryAttack(j, r, index);
   });
   $("#card-stack tbody tr").bind('click', function() {

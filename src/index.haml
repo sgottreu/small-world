@@ -1,8 +1,6 @@
 %html
     %head
-        %script{ :src => "js/underscore.js"}
         %script{ :src => "http://code.jquery.com/jquery-1.8.3.min.js"}
-        %script{ :src => "js/jquery.maphilight.min.js"}
         %script{ :src => "js/functions.js"}
         %script{ :src => "js/race.js"}
         %script{ :src => "js/territory.js"}
@@ -10,8 +8,14 @@
         %script{ :src => "js/player.js"}
         %script{ :src => "js/civilization.js"}
         %script{ :src => "js/prep.js"}
+
+        %link{ :href => "css/style.css", :rel=>"stylesheet", :type=>"text/css"}
+
+            
     %body
-        %img{ :src => "images/map.jpg", :width => "2048", :height => "1536", :border => "0", :usemap => "#map", :class => "map"}
+        %canvas{ :width => "2048", :height => "1536", :id => "map"}
+        %img{ :src => "images/map.jpg", :width => "2048", :height => "1536", :border => "0", :class => "map"}
+        %img{ :src => "images/clear.png", :width => "2048", :height => "1536", :border => "0", :usemap => "#map", :class => "map clear"}
         %table{ :border => 1, :id => "card-stack"}
             %thead
                 %tr
@@ -22,7 +26,7 @@
                     %th
                         Strength 
             %tbody
-            
+
         %map{ :name => "map"}
             %area{ :shape => "poly", :coords => "40,482,43,174,563,159,572,207,565,267,577,323,545,354,525,307,472,322,426,386,390,377,338,389,311,451,264,478,251,454,214,468,182,398,150,465,131,464,113,507,71,499,58,492", :id => "territory-1", :"data-maphilight" => '{"strokeColor":"0000ff","strokeWidth":5,"fillColor":"cccccc","fillOpacity":0.6}', :class => "territory" }
             %area{ :shape => "poly", :coords => "565,160,833,146,848,157,833,243,869,323,839,379,771,386,641,456,617,437,589,443,540,365,584,320", :id => "territory-2", :"data-maphilight" => '{"strokeColor":"0000ff","strokeWidth":5,"fillColor":"cccccc","fillOpacity":0.6}', :class => "territory" }
@@ -48,16 +52,16 @@
             %area{ :shape => "poly", :coords => "1601,879,1775,789,1850,873,1896,917,1862,997,1828,1044,1745,1067,1685,1067,1628,994", :id => "territory-22", :"data-maphilight" => '{"strokeColor":"0000ff","strokeWidth":5,"fillColor":"cccccc","fillOpacity":0.6}', :class => "territory" }
             %area{ :shape => "poly", :coords => "1532,1239,1602,1146,1640,1082,1678,1068,1767,1060,1847,1025,1895,922,1956,904,2013,906,2030,1221", :id => "territory-23", :"data-maphilight" => '{"strokeColor":"0000ff","strokeWidth":5,"fillColor":"cccccc","fillOpacity":0.6}', :class => "territory" }
         
-    %table{ :border => 1, :id => 'playerTable'}
-        %thead
-            %tr
-                %th
-                    Player
-                %th
-                    Points
-                %th
-                    Race/Power
-                %th
-                    Strength
-        %tbody
-    
+        %table{ :border => 1, :id => 'playerTable'}
+            %thead
+                %tr
+                    %th
+                        Player
+                    %th
+                        Points
+                    %th
+                        Race/Power
+                    %th
+                        Strength
+            %tbody
+

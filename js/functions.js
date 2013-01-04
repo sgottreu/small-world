@@ -32,3 +32,20 @@ window.rollDie = function() {
     return 3;
   }
 };
+
+window.colorTerritory = function(color, poly) {
+  var canvas, ctx, num, _i, _ref;
+  console.log(window.document.getElementById("map"));
+  canvas = window.document.getElementById("map");
+  ctx = canvas.getContext('2d');
+  ctx.fillStyle = color;
+  ctx.globalAlpha = 0.30;
+  ctx.beginPath();
+  ctx.moveTo(poly[0], poly[1]);
+  for (num = _i = 2, _ref = poly.length - 1; _i <= _ref; num = _i += 2) {
+    ctx.lineTo(poly[num], poly[num + 1]);
+  }
+  ctx.closePath();
+  ctx.fill();
+  return true;
+};
