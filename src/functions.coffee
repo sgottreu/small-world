@@ -36,11 +36,10 @@ window.rollDie = () ->
 
 window.colorTerritory = (color, poly) ->
 
-    console.log(window.document.getElementById("map"))
     canvas=window.document.getElementById("map")
     ctx = canvas.getContext('2d')
     ctx.fillStyle = color
-    ctx.globalAlpha = 0.30
+    ctx.globalAlpha = 1
     
     ctx.beginPath()
     ctx.moveTo(poly[0], poly[1])

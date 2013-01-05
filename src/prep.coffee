@@ -22,7 +22,7 @@ $ ->
     
         if window.window.players[j].canPickRace
             race = Math.floor((Math.random() * 6) + 1)
-            console.log(window.racePowerStack[race])
+            
             while window.racePowerStack[race] == null
                 race = Math.floor((Math.random() * 6) + 1)
             pickRacePower(race)
@@ -32,7 +32,7 @@ $ ->
         while window.players[j].canAttack == true
         
             pick = Math.floor((Math.random() * (window.territories.length-1)) + 1)            
-            console.log(pick)           
+         
             territoryAttack(j,r,pick)
     
     
@@ -40,13 +40,27 @@ $ ->
         window.players[j].civilizations[r].totalTokens = window.players[j].civilizations[r].totalTokens - needed
         $("#playerTable tbody").find('[data-id="'+j+'"]').find('[data-td="tokens"]').html(window.players[j].civilizations[r].totalTokens)
         
+        window.players[j].civilizations[r].startRound = false
+        
         if window.players[j].civilizations[r].totalTokens == 0
             next = changePlayer(j,r)
             checkAI(next)
-            
-        window.players[j].civilizations[r].startRound = false
-        
+
         return 
+        
+    claimTerritory = (j,index) ->
+        coords = $('#territory-'+window.territories[index].id).attr("coords").split(",");
+        window.colorTerritory(window.players[j].color, coords)
+        
+        canvas=window.document.getElementById("map")
+        ctx = canvas.getContext('2d')
+        
+        ctx.font = "bold 20px sans-serif"
+        ctx.fillStyle = '#fff'
+        ctx.globalAlpha = 1.0
+        ctx.fillText(window.territories[index].playerTokens, coords[0], coords[1])
+        return        
+
         
     setTerritoryForPlayer = (j,r,index,tokens) ->
         window.territories[index].playerTokens = tokens
@@ -74,6 +88,7 @@ $ ->
         if needed <= window.players[j].civilizations[r].totalTokens
             setTerritoryForPlayer(j,r,index,needed)
             updatePlayerTokens(j,r,needed)
+            claimTerritory(j,index)
             
             console.log(window.players[j].name+' now has Tokens: ', window.players[j].civilizations[r].totalTokens)
             return true
@@ -90,7 +105,8 @@ $ ->
                 if needed <= window.players[j].civilizations[r].totalTokens + dieRoll
                     setTerritoryForPlayer(j,r,index,window.players[j].civilizations[r].totalTokens)
                     console.log('Roll was successful.')
-                    updatePlayerTokens(j,r,window.players[j].civilizations[r].totalTokens)                
+                    updatePlayerTokens(j,r,window.players[j].civilizations[r].totalTokens)  
+                    claimTerritory(j,index)              
                     return true
                 else
                     console.log(window.players[j].name+' failed the roll.')
@@ -106,7 +122,9 @@ $ ->
 
     
     changePlayer = (j,r) ->
-        window.players[j].canAttack = false        
+        window.players[j].canAttack = false   
+        window.players[j].civilizations[r].startRound = false
+             
         console.log(window.players[j].name+' has completed their turn.')
 
         window.currentPlayer++         
@@ -172,6 +190,10 @@ $ ->
             alert('You don\'t have enough Victory Points to choose that race.')
         
         for item, i in window.racePowerStack when i < id
+            
+            if window.racePowerStack[i] == null 
+                continue
+            
             if $("#card-stack tbody").find('[data-id="'+i+'"]').index() >= 0 && id != i
                 window.racePowerStack[i].points++
                 window.players[j].victoryPoints--
@@ -253,9 +275,6 @@ $ ->
         j = window.currentPlayer-1
         r = window.players[j].civilizations.length - 1
         
-        coords = $(this).attr("coords").split(",");
-        window.colorTerritory(window.players[j].color, coords)
-
         territoryAttack(j,r,index)
         
     $("#card-stack tbody tr").bind 'click', ->
