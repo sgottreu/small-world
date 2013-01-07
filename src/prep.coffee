@@ -28,13 +28,14 @@ $ ->
             pickRacePower(race)
             
         r = window.players[j].civilizations.length-1
-            
+        attack = window.players[j].canAttack
         while window.players[j].canAttack == true
         
-            pick = Math.floor((Math.random() * (window.territories.length-1)) + 1)            
-         
-            territoryAttack(j,r,pick)
-    
+            pick = Math.floor((Math.random() * (window.territories.length-1)) + 1)         
+            attack = territoryAttack(j,r,pick)
+            i++
+
+        return 
     
     updatePlayerTokens = (j,r,needed) ->
         window.players[j].civilizations[r].totalTokens = window.players[j].civilizations[r].totalTokens - needed
@@ -87,8 +88,8 @@ $ ->
         console.log('Number of Tokens needed to attack', needed)
         if needed <= window.players[j].civilizations[r].totalTokens
             setTerritoryForPlayer(j,r,index,needed)
-            updatePlayerTokens(j,r,needed)
             claimTerritory(j,index)
+            updatePlayerTokens(j,r,needed)
             
             console.log(window.players[j].name+' now has Tokens: ', window.players[j].civilizations[r].totalTokens)
             return true
@@ -105,8 +106,10 @@ $ ->
                 if needed <= window.players[j].civilizations[r].totalTokens + dieRoll
                     setTerritoryForPlayer(j,r,index,window.players[j].civilizations[r].totalTokens)
                     console.log('Roll was successful.')
+                    claimTerritory(j,index)
                     updatePlayerTokens(j,r,window.players[j].civilizations[r].totalTokens)  
-                    claimTerritory(j,index)              
+                    next = changePlayer(j,r)
+                    checkAI(next)              
                     return true
                 else
                     console.log(window.players[j].name+' failed the roll.')
@@ -115,7 +118,7 @@ $ ->
                     return false
 
     checkAI = (j) ->
-        if window.players[j].playerType == 'ai'
+        if (window.players[j].playerType == 'ai')
             aiTurn()
             return true
         return false
@@ -225,7 +228,7 @@ $ ->
                 window.players[j].canAttack = attackTerritory(j,r,index)
             else
                 console.log('You must chose a territory on the edge.')
-                return false
+                return true
             
 
         else
@@ -233,7 +236,7 @@ $ ->
                 window.players[j].canAttack = attackTerritory(j,r,index)
             else
                 console.log('That territory is not adjacent.') 
-                return false
+                return true
         
 
     ###

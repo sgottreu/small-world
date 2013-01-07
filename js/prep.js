@@ -17,7 +17,7 @@ $(function() {
   */
 
   aiTurn = function() {
-    var j, pick, r, race, _results;
+    var attack, j, pick, r, race;
     j = window.currentPlayer - 1;
     if (window.window.players[j].canPickRace) {
       race = Math.floor((Math.random() * 6) + 1);
@@ -27,12 +27,12 @@ $(function() {
       pickRacePower(race);
     }
     r = window.players[j].civilizations.length - 1;
-    _results = [];
+    attack = window.players[j].canAttack;
     while (window.players[j].canAttack === true) {
       pick = Math.floor((Math.random() * (window.territories.length - 1)) + 1);
-      _results.push(territoryAttack(j, r, pick));
+      attack = territoryAttack(j, r, pick);
+      i++;
     }
-    return _results;
   };
   updatePlayerTokens = function(j, r, needed) {
     var next;
@@ -75,8 +75,8 @@ $(function() {
     console.log('Number of Tokens needed to attack', needed);
     if (needed <= window.players[j].civilizations[r].totalTokens) {
       setTerritoryForPlayer(j, r, index, needed);
-      updatePlayerTokens(j, r, needed);
       claimTerritory(j, index);
+      updatePlayerTokens(j, r, needed);
       console.log(window.players[j].name + ' now has Tokens: ', window.players[j].civilizations[r].totalTokens);
       return true;
     } else {
@@ -91,8 +91,10 @@ $(function() {
         if (needed <= window.players[j].civilizations[r].totalTokens + dieRoll) {
           setTerritoryForPlayer(j, r, index, window.players[j].civilizations[r].totalTokens);
           console.log('Roll was successful.');
-          updatePlayerTokens(j, r, window.players[j].civilizations[r].totalTokens);
           claimTerritory(j, index);
+          updatePlayerTokens(j, r, window.players[j].civilizations[r].totalTokens);
+          next = changePlayer(j, r);
+          checkAI(next);
           return true;
         } else {
           console.log(window.players[j].name + ' failed the roll.');
@@ -208,14 +210,14 @@ $(function() {
         return window.players[j].canAttack = attackTerritory(j, r, index);
       } else {
         console.log('You must chose a territory on the edge.');
-        return false;
+        return true;
       }
     } else {
       if (window.territories[index].isAdjacent(window.players[j].territory)) {
         return window.players[j].canAttack = attackTerritory(j, r, index);
       } else {
         console.log('That territory is not adjacent.');
-        return false;
+        return true;
       }
     }
   };
