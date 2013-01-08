@@ -17,64 +17,96 @@ class Power
         
     attackStrength: (territory, points) ->
     
-    checkVictoryPoints: (territory) ->
-        return 0
+    checkVictoryPoints: (points) ->
+        console.log('Returning Power Victory points')
+        return points
 
 class Alchemist extends Power 
     set: ->        
-    checkVictoryPoints: (territory) ->
-        return @coins
+    checkVictoryPoints: (territory, j) ->
+        super @coins
 class Berserk extends Power 
     set: ->
+    checkVictoryPoints: (territory, j) ->
+        super 0
 class Bivouacking extends Power 
     set: ->
+    checkVictoryPoints: (territory, j) ->
+        super 0
 class Commando extends Power 
     set: ->
+    checkVictoryPoints: (territory, j) ->
+        super 0
 class Diplomat extends Power 
     set: ->
+    checkVictoryPoints: (territory, j) ->
+        super 0
 class DragonMaster extends Power 
     set: ->
+    checkVictoryPoints: (territory, j) ->
+        super 0
 class Flying extends Power 
     set: ->
+    checkVictoryPoints: (territory, j) ->
+        super 0
 class Forest extends Power 
     set: ->
-    checkVictoryPoints: (territory) ->
+    checkVictoryPoints: (territory, j) ->
         if territory.type == 'forest'
-            return 1
+            super 1
         else 
-            return 0
+            super 0
 class Fortified extends Power 
     set: ->
+    checkVictoryPoints: (territory, j) ->
+        super 0
 class Heroic extends Power 
     set: ->
+    checkVictoryPoints: (territory, j) ->
+        super 0
 class Hill extends Power 
     set: ->
-    checkVictoryPoints: (territory) ->
+    checkVictoryPoints: (territory, j) ->
         if territory.type == 'hill'
-            return 1
+            super 1
         else 
-            return 0
+            super 0
 class Merchant extends Power 
     set: ->
-    checkVictoryPoints: (territory) ->
-        return 1
+    checkVictoryPoints: (territory, j) ->
+        super 1
 class Mounted extends Power 
     set: ->
+    checkVictoryPoints: (territory, j) ->
+        super 0
 class Pillaging extends Power 
     set: ->
+    checkVictoryPoints: (territory, j) ->
+        console.log('Calculating Pillaging Victory points')
+        if territory.nonEmpty[j] == true 
+            console.log('+1 for non-Empty Territory '+territory.id)
+            super 1
+        else 
+            super 0
 class Seafaring extends Power 
     set: ->
+    checkVictoryPoints: (territory, j) ->
+        super 0
 class Spirit extends Power 
     set: ->
+    checkVictoryPoints: (territory, j) ->
+        super 0
 class Stout extends Power 
     set: ->
+    checkVictoryPoints: (territory, j) ->
+        super 0
 class Swamp extends Power 
     set: ->
-    checkVictoryPoints: (territory) ->
+    checkVictoryPoints: (territory, j) ->
         if territory.type == 'swamp'
-            return 1
+            super 1
         else 
-            return 0
+            super 0
 class Underworld extends Power 
     set: ->
     
@@ -87,11 +119,11 @@ class Underworld extends Power
     
 class Wealthy extends Power 
     set: ->
-    checkVictoryPoints: (territory) ->    
+    checkVictoryPoints: (territory, j) ->    
         if window.currentRound == 1
-            return 7
+            super 7
         else 
-            return 0
+            super 0
         
 window.powers = [
     new Alchemist { name: 'Alchemist', coins: 2, perRound: true, startingTokens: 4}

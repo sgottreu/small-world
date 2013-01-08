@@ -22,8 +22,9 @@ Race = (function() {
     this.data = null;
   }
 
-  Race.prototype.checkVictoryPoints = function(territory) {
-    return 0;
+  Race.prototype.checkVictoryPoints = function(points) {
+    console.log('Returning Race Victory points');
+    return points;
   };
 
   return Race;
@@ -38,8 +39,8 @@ Amazons = (function(_super) {
     return Amazons.__super__.constructor.apply(this, arguments);
   }
 
-  Amazons.prototype.checkVictoryPoints = function(territory) {
-    return 0;
+  Amazons.prototype.checkVictoryPoints = function(territory, j) {
+    return Amazons.__super__.checkVictoryPoints.call(this, 0);
   };
 
   return Amazons;
@@ -54,11 +55,11 @@ Dwarves = (function(_super) {
     return Dwarves.__super__.constructor.apply(this, arguments);
   }
 
-  Dwarves.prototype.checkVictoryPoints = function(territory) {
+  Dwarves.prototype.checkVictoryPoints = function(territory, j) {
     if (territory.isMine) {
-      return 1;
+      return Dwarves.__super__.checkVictoryPoints.call(this, 1);
     } else {
-      return 0;
+      return Dwarves.__super__.checkVictoryPoints.call(this, 0);
     }
   };
 
@@ -74,8 +75,8 @@ Elves = (function(_super) {
     return Elves.__super__.constructor.apply(this, arguments);
   }
 
-  Elves.prototype.checkVictoryPoints = function(territory) {
-    return 0;
+  Elves.prototype.checkVictoryPoints = function(territory, j) {
+    return Elves.__super__.checkVictoryPoints.call(this, 0);
   };
 
   return Elves;
@@ -90,8 +91,8 @@ Ghouls = (function(_super) {
     return Ghouls.__super__.constructor.apply(this, arguments);
   }
 
-  Ghouls.prototype.checkVictoryPoints = function(territory) {
-    return 0;
+  Ghouls.prototype.checkVictoryPoints = function(territory, j) {
+    return Ghouls.__super__.checkVictoryPoints.call(this, 0);
   };
 
   return Ghouls;
@@ -106,8 +107,8 @@ Ratmen = (function(_super) {
     return Ratmen.__super__.constructor.apply(this, arguments);
   }
 
-  Ratmen.prototype.checkVictoryPoints = function(territory) {
-    return 0;
+  Ratmen.prototype.checkVictoryPoints = function(territory, j) {
+    return Ratmen.__super__.checkVictoryPoints.call(this, 0);
   };
 
   return Ratmen;
@@ -122,8 +123,8 @@ Skeletons = (function(_super) {
     return Skeletons.__super__.constructor.apply(this, arguments);
   }
 
-  Skeletons.prototype.checkVictoryPoints = function(territory) {
-    return 0;
+  Skeletons.prototype.checkVictoryPoints = function(territory, j) {
+    return Skeletons.__super__.checkVictoryPoints.call(this, 0);
   };
 
   return Skeletons;
@@ -138,8 +139,8 @@ Sorcerers = (function(_super) {
     return Sorcerers.__super__.constructor.apply(this, arguments);
   }
 
-  Sorcerers.prototype.checkVictoryPoints = function(territory) {
-    return 0;
+  Sorcerers.prototype.checkVictoryPoints = function(territory, j) {
+    return Sorcerers.__super__.checkVictoryPoints.call(this, 0);
   };
 
   return Sorcerers;
@@ -154,8 +155,8 @@ Tritons = (function(_super) {
     return Tritons.__super__.constructor.apply(this, arguments);
   }
 
-  Tritons.prototype.checkVictoryPoints = function(territory) {
-    return 0;
+  Tritons.prototype.checkVictoryPoints = function(territory, j) {
+    return Tritons.__super__.checkVictoryPoints.call(this, 0);
   };
 
   return Tritons;
@@ -170,8 +171,8 @@ Giants = (function(_super) {
     return Giants.__super__.constructor.apply(this, arguments);
   }
 
-  Giants.prototype.checkVictoryPoints = function(territory) {
-    return 0;
+  Giants.prototype.checkVictoryPoints = function(territory, j) {
+    return Giants.__super__.checkVictoryPoints.call(this, 0);
   };
 
   return Giants;
@@ -186,8 +187,8 @@ Halflings = (function(_super) {
     return Halflings.__super__.constructor.apply(this, arguments);
   }
 
-  Halflings.prototype.checkVictoryPoints = function(territory) {
-    return 0;
+  Halflings.prototype.checkVictoryPoints = function(territory, j) {
+    return Halflings.__super__.checkVictoryPoints.call(this, 0);
   };
 
   return Halflings;
@@ -202,11 +203,12 @@ Humans = (function(_super) {
     return Humans.__super__.constructor.apply(this, arguments);
   }
 
-  Humans.prototype.checkVictoryPoints = function(territory) {
+  Humans.prototype.checkVictoryPoints = function(territory, j) {
     if (territory.type === 'farm') {
-      return 1;
+      console.log('+1 for Territory ' + territory.id + ' which is farm');
+      return Humans.__super__.checkVictoryPoints.call(this, 1);
     } else {
-      return 0;
+      return Humans.__super__.checkVictoryPoints.call(this, 0);
     }
   };
 
@@ -222,8 +224,14 @@ Orcs = (function(_super) {
     return Orcs.__super__.constructor.apply(this, arguments);
   }
 
-  Orcs.prototype.checkVictoryPoints = function(territory) {
-    return 0;
+  Orcs.prototype.checkVictoryPoints = function(territory, j) {
+    console.log('Calculating Orc Victory points');
+    if (territory.nonEmpty[j] === true) {
+      console.log('+1 for non-Empty Territory ' + territory.id);
+      return Orcs.__super__.checkVictoryPoints.call(this, 1);
+    } else {
+      return Orcs.__super__.checkVictoryPoints.call(this, 0);
+    }
   };
 
   return Orcs;
@@ -238,8 +246,8 @@ Trolls = (function(_super) {
     return Trolls.__super__.constructor.apply(this, arguments);
   }
 
-  Trolls.prototype.checkVictoryPoints = function(territory) {
-    return 0;
+  Trolls.prototype.checkVictoryPoints = function(territory, j) {
+    return Trolls.__super__.checkVictoryPoints.call(this, 0);
   };
 
   return Trolls;
@@ -254,11 +262,11 @@ Wizards = (function(_super) {
     return Wizards.__super__.constructor.apply(this, arguments);
   }
 
-  Wizards.prototype.checkVictoryPoints = function(territory) {
+  Wizards.prototype.checkVictoryPoints = function(territory, j) {
     if (territory.isMagic) {
-      return 1;
+      return Wizards.__super__.checkVictoryPoints.call(this, 1);
     } else {
-      return 0;
+      return Wizards.__super__.checkVictoryPoints.call(this, 0);
     }
   };
 
@@ -267,59 +275,59 @@ Wizards = (function(_super) {
 })(Race);
 
 window.races = [
-  new Race({
+  new Amazons({
     name: 'Amazons',
     totalAvailTokens: 15,
     startingTokens: 6
-  }), new Race({
+  }), new Dwarves({
     name: 'Dwarves',
     totalAvailTokens: 8,
     startingTokens: 3
-  }), new Race({
+  }), new Elves({
     name: 'Elves',
     totalAvailTokens: 11,
     startingTokens: 6
-  }), new Race({
+  }), new Ghouls({
     name: 'Ghouls',
     totalAvailTokens: 10,
     startingTokens: 5
-  }), new Race({
+  }), new Ratmen({
     name: 'Ratmen',
     totalAvailTokens: 13,
     startingTokens: 8
-  }), new Race({
+  }), new Skeletons({
     name: 'Skeletons',
     totalAvailTokens: 20,
     startingTokens: 6
-  }), new Race({
+  }), new Sorcerers({
     name: 'Sorcerers',
     totalAvailTokens: 18,
     startingTokens: 5
-  }), new Race({
+  }), new Tritons({
     name: 'Tritons',
     totalAvailTokens: 11,
     startingTokens: 6
-  }), new Race({
+  }), new Giants({
     name: 'Giants',
     totalAvailTokens: 11,
     startingTokens: 6
-  }), new Race({
+  }), new Halflings({
     name: 'Halflings',
     totalAvailTokens: 11,
     startingTokens: 6
-  }), new Race({
+  }), new Humans({
     name: 'Humans',
     totalAvailTokens: 10,
     startingTokens: 5
-  }), new Race({
+  }), new Orcs({
     name: 'Orcs',
     totalAvailTokens: 10,
     startingTokens: 5
-  }), new Race({
+  }), new Trolls({
     name: 'Trolls',
     totalAvailTokens: 10,
     startingTokens: 5
-  }), new Race({
+  }), new Wizards({
     name: 'Wizards',
     totalAvailTokens: 10,
     startingTokens: 5

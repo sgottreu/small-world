@@ -120,7 +120,6 @@ window.territories = [
     isMagic: false,
     isUnderworld: true,
     lostTribe: true,
-    nonEmpty: true,
     adjacent: [3, 5, 9, 10]
   }), new Territory({
     id: 5,
@@ -160,7 +159,6 @@ window.territories = [
     isMagic: false,
     isUnderworld: false,
     lostTribe: true,
-    nonEmpty: true,
     adjacent: [2, 3, 6, 8, 12, 13]
   }), new Territory({
     id: 8,
@@ -213,7 +211,6 @@ window.territories = [
     isMagic: true,
     isUnderworld: false,
     lostTribe: true,
-    nonEmpty: true,
     adjacent: [5, 10, 15, 16]
   }), new Territory({
     id: 12,
@@ -227,7 +224,6 @@ window.territories = [
     isMagic: false,
     isUnderworld: false,
     lostTribe: true,
-    nonEmpty: true,
     adjacent: [6, 7, 13, 17, 18]
   }), new Territory({
     id: 13,
@@ -241,7 +237,6 @@ window.territories = [
     isMagic: false,
     isUnderworld: false,
     lostTribe: true,
-    nonEmpty: true,
     adjacent: [7, 8, 12, 14, 18, 19]
   }), new Territory({
     id: 14,
@@ -255,7 +250,6 @@ window.territories = [
     isMagic: true,
     isUnderworld: false,
     lostTribe: true,
-    nonEmpty: true,
     adjacent: [8, 9, 13, 15, 19, 20, 21]
   }), new Territory({
     id: 15,
@@ -269,7 +263,6 @@ window.territories = [
     isMagic: false,
     isUnderworld: true,
     lostTribe: true,
-    nonEmpty: true,
     adjacent: [9, 10, 11, 14, 16, 21, 22]
   }), new Territory({
     id: 16,
@@ -296,7 +289,6 @@ window.territories = [
     isMagic: true,
     isUnderworld: false,
     lostTribe: true,
-    nonEmpty: true,
     adjacent: [12, 18]
   }), new Territory({
     id: 18,
@@ -323,7 +315,6 @@ window.territories = [
     isMagic: false,
     isUnderworld: false,
     lostTribe: true,
-    nonEmpty: true,
     adjacent: [13, 14, 18, 20]
   }), new Territory({
     id: 20,

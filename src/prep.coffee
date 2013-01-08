@@ -62,9 +62,9 @@ $ ->
     setTerritoryForPlayer = (j,r,index,tokens) ->
         window.territories[index].playerTokens = tokens
         window.territories[index].playerId = j
-        
-        window.territories[index].nonEmpty = true
-        
+        ###
+        window.territories[index].nonEmpty[j] = true
+        ###
         window.players[j].territory.push(window.territories[index])
   
         
@@ -76,12 +76,14 @@ $ ->
             checkAI(next)
             return false
         
-        console.log(window.players[j].name+' is attacking territory: '+window.territories[index].id)
-        console.log('  Type is: '+window.territories[index].type)
         console.log(window.players[j].name+' Current Tokens: ', window.players[j].civilizations[r].totalTokens)
             
         needed = window.territories[index].tokensNeeded()
         console.log('Number of Tokens needed to attack', needed)
+        
+        console.log(window.players[j].name+' is attacking territory: '+window.territories[index].id)
+        console.log('  Type is: '+window.territories[index].type)
+        
         if needed <= window.players[j].civilizations[r].totalTokens
             setTerritoryForPlayer(j,r,index,needed)
             claimTerritory(j,index)
@@ -150,9 +152,10 @@ $ ->
         for item, i in window.territories
             if item.playerId == j
                 window.players[j].victoryPoints++
-                window.players[j].victoryPoints += window.players[j].civilizations[r].power.checkVictoryPoints(item)
-                if window.territories.nonEmpty[j] && (window.players[j].civilizations[r].race.name = 'Orcs' || window.players[j].civilizations[r].power.name == 'Pillaging')
-                    window.players[j].victoryPoints++
+                console.log('+1 for holding Territory '+item.id)
+                window.players[j].victoryPoints += window.players[j].civilizations[r].power.checkVictoryPoints(item,j)
+                window.players[j].victoryPoints += window.players[j].civilizations[r].race.checkVictoryPoints(item,j)
+
         $("#playerTable tbody").find('[data-id="'+j+'"]').find('td:eq(1)').html(window.players[j].victoryPoints)
     
         
@@ -265,6 +268,7 @@ $ ->
         html += '<td>'+window.territories[index].playerTokens+'</td>'
         html += '<td>'+window.territories[index].type+'</td>'
         
+        
         if start == true
             for item, i in window.players 
                 if window.territories[index].lostTribe
@@ -287,6 +291,7 @@ $ ->
     (showRacePowerStack(item,i) for item, i in window.racePowerStack)
 
     (debugTerritories(i,true) for item, i in window.territories)
+
     
     ###
          
