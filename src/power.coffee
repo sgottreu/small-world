@@ -16,9 +16,13 @@ class Power
         @data = null
         
     attackStrength: (territory, points) ->
+    
+    checkVictoryPoints: (territory) ->
 
 class Alchemist extends Power 
     set: ->        
+    checkVictoryPoints: (territory) ->
+        return @coins
 class Berserk extends Power 
     set: ->
 class Bivouacking extends Power 
@@ -33,14 +37,27 @@ class Flying extends Power
     set: ->
 class Forest extends Power 
     set: ->
+    checkVictoryPoints: (territory) ->
+        vPoints = 0
+        if territory.type == 'forest'
+            return 1
+        else 
+            return 0
 class Fortified extends Power 
     set: ->
 class Heroic extends Power 
     set: ->
 class Hill extends Power 
     set: ->
+    checkVictoryPoints: (territory) ->
+        if territory.type == 'hill'
+            return 1
+        else 
+            return 0
 class Merchant extends Power 
     set: ->
+    checkVictoryPoints: (territory) ->
+        return 1
 class Mounted extends Power 
     set: ->
 class Pillaging extends Power 
@@ -53,6 +70,11 @@ class Stout extends Power
     set: ->
 class Swamp extends Power 
     set: ->
+    checkVictoryPoints: (territory) ->
+        if territory.type == 'swamp'
+            return 1
+        else 
+            return 0
 class Underworld extends Power 
     set: ->
     
@@ -65,6 +87,11 @@ class Underworld extends Power
     
 class Wealthy extends Power 
     set: ->
+    checkVictoryPoints: (territory) ->    
+        if window.currentRound == 1
+            return 7
+        else 
+            return 0
         
 window.powers = [
     new Alchemist { name: 'Alchemist', coins: 2, perRound: true, startingTokens: 4}

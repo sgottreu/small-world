@@ -5,7 +5,7 @@ $(function() {
            Global Variables
   */
 
-  var aiTurn, attackTerritory, changePlayer, checkAI, claimTerritory, gatherTokens, i, item, pickRacePower, prepForTurn, setPlayerTable, setTerritoryForPlayer, showRacePowerStack, territoryAttack, updatePlayerTokens, _i, _j, _len, _len1, _ref, _ref1,
+  var aiTurn, attackTerritory, calculateVictoryPoints, changePlayer, checkAI, claimTerritory, debugTerritories, gatherTokens, i, item, pickRacePower, prepForTurn, setPlayerTable, setTerritoryForPlayer, showRacePowerStack, territoryAttack, updatePlayerTokens, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2,
     _this = this;
   window.gameRound = 10;
   window.currentRound = 1;
@@ -31,18 +31,15 @@ $(function() {
     while (window.players[j].canAttack === true) {
       pick = Math.floor((Math.random() * (window.territories.length - 1)) + 1);
       attack = territoryAttack(j, r, pick);
-      i++;
+      if (attack === false) {
+        break;
+      }
     }
   };
   updatePlayerTokens = function(j, r, needed) {
-    var next;
     window.players[j].civilizations[r].totalTokens = window.players[j].civilizations[r].totalTokens - needed;
     $("#playerTable tbody").find('[data-id="' + j + '"]').find('[data-td="tokens"]').html(window.players[j].civilizations[r].totalTokens);
-    window.players[j].civilizations[r].startRound = false;
-    if (window.players[j].civilizations[r].totalTokens === 0) {
-      next = changePlayer(j, r);
-      checkAI(next);
-    }
+    return window.players[j].civilizations[r].startRound = false;
   };
   claimTerritory = function(j, index) {
     var canvas, coords, ctx;
@@ -54,6 +51,7 @@ $(function() {
     ctx.fillStyle = '#fff';
     ctx.globalAlpha = 1.0;
     ctx.fillText(window.territories[index].playerTokens, coords[0], coords[1]);
+    debugTerritories(index, false);
   };
   setTerritoryForPlayer = function(j, r, index, tokens) {
     window.territories[index].playerTokens = tokens;
@@ -115,6 +113,7 @@ $(function() {
   changePlayer = function(j, r) {
     window.players[j].canAttack = false;
     window.players[j].civilizations[r].startRound = false;
+    calculateVictoryPoints(j, r);
     console.log(window.players[j].name + ' has completed their turn.');
     window.currentPlayer++;
     if (window.currentPlayer > window.players.length) {
@@ -132,6 +131,18 @@ $(function() {
     }
     return j;
   };
+  calculateVictoryPoints = function(j, r) {
+    var i, item, _i, _len, _ref;
+    _ref = window.territories;
+    for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+      item = _ref[i];
+      if (item.playerId === j) {
+        window.players[j].victoryPoints++;
+        window.players[j].victoryPoints += window.players[j].civilizations[r].power.checkVictoryPoints(item);
+      }
+    }
+    return $("#playerTable tbody").find('[data-id="' + j + '"]').find('td:eq(1)').html(window.players[j].victoryPoints);
+  };
   prepForTurn = function(j, r) {
     gatherTokens(j, r);
     return window.players[j].canAttack = true;
@@ -144,8 +155,10 @@ $(function() {
         item = _ref[i];
         if (item.playerId === j) {
           tokens = parseInt(item.playerTokens) - 1;
+          window.territories[i].playerTokens = 1;
           window.players[j].civilizations[r].totalTokens = window.players[j].civilizations[r].totalTokens + tokens;
           console.log('Pulling ' + tokens + ' tokens from territory ' + item.id);
+          debugTerritories(i, false);
         }
       }
       return console.log(window.players[j].name + ' has ' + window.players[j].civilizations[r].totalTokens + ' tokens');
@@ -221,6 +234,19 @@ $(function() {
       }
     }
   };
+  debugTerritories = function(index, start) {
+    var html;
+    html = '<td>' + window.territories[index].id + '</td>';
+    html += '<td>' + window.territories[index].playerId + '</td>';
+    html += '<td>' + window.territories[index].totalTokens + '</td>';
+    html += '<td>' + window.territories[index].playerTokens + '</td>';
+    html += '<td>' + window.territories[index].type + '</td>';
+    if (start === true) {
+      $('#territoryTable').find('tbody:last').append('<tr data-id="' + index + '">' + html + '</tr>');
+    } else {
+      $("#territoryTable tbody").find('[data-id="' + index + '"]').html(html);
+    }
+  };
   /*
       
            Loops to Build things
@@ -236,27 +262,21 @@ $(function() {
     item = _ref1[i];
     showRacePowerStack(item, i);
   }
+  _ref2 = window.territories;
+  for (i = _k = 0, _len2 = _ref2.length; _k < _len2; i = ++_k) {
+    item = _ref2[i];
+    debugTerritories(i, true);
+  }
   /*
            
            jQuery UI functions
   */
 
-  /*
-      $('.map').maphilight => {neverOn: true}
-      $(".territory").bind 'hover', ->
-          id = this.id.split("-")
-          index = parseInt(id[1] - 1)
-          
-      $(".territory").bind 'click', ->
-          id = this.id.split("-")
-          index = parseInt(id[1] - 1)
-          
-          data = $('#'+this.id).data('maphilight') || {}
-          data.fillColor = "cccccc"
-          data.alwaysOn = true
-          $('#'+this.id).data('maphilight', data)
-  */
-
+  $(".territory").bind('hover', function() {
+    var id, index;
+    id = this.id.split("-");
+    return index = parseInt(id[1] - 1);
+  });
   $(".territory").bind('dblclick', function() {
     var id, index, j, r;
     id = this.id.split("-");

@@ -6,7 +6,6 @@ $ ->
     ###
 
     window.gameRound = 10
-    
     window.currentRound = 1
     window.currentPlayer = 1
     window.canPickRace = true
@@ -33,7 +32,7 @@ $ ->
         
             pick = Math.floor((Math.random() * (window.territories.length-1)) + 1)         
             attack = territoryAttack(j,r,pick)
-            i++
+            if attack == false then break
 
         return 
     
@@ -42,12 +41,7 @@ $ ->
         $("#playerTable tbody").find('[data-id="'+j+'"]').find('[data-td="tokens"]').html(window.players[j].civilizations[r].totalTokens)
         
         window.players[j].civilizations[r].startRound = false
-        
-        if window.players[j].civilizations[r].totalTokens == 0
-            next = changePlayer(j,r)
-            checkAI(next)
 
-        return 
         
     claimTerritory = (j,index) ->
         coords = $('#territory-'+window.territories[index].id).attr("coords").split(",");
@@ -60,12 +54,13 @@ $ ->
         ctx.fillStyle = '#fff'
         ctx.globalAlpha = 1.0
         ctx.fillText(window.territories[index].playerTokens, coords[0], coords[1])
+        
+        debugTerritories(index,false)
         return        
 
         
     setTerritoryForPlayer = (j,r,index,tokens) ->
         window.territories[index].playerTokens = tokens
-        
         window.territories[index].playerId = j
         window.territories[index].playerTerritory = window.players[j].territory.length
         
@@ -127,6 +122,7 @@ $ ->
     changePlayer = (j,r) ->
         window.players[j].canAttack = false   
         window.players[j].civilizations[r].startRound = false
+        calculateVictoryPoints(j,r)
              
         console.log(window.players[j].name+' has completed their turn.')
 
@@ -148,6 +144,14 @@ $ ->
         return j
 
     
+    calculateVictoryPoints = (j,r) ->
+        for item, i in window.territories
+            if item.playerId == j
+                window.players[j].victoryPoints++
+                window.players[j].victoryPoints += window.players[j].civilizations[r].power.checkVictoryPoints(item)
+        $("#playerTable tbody").find('[data-id="'+j+'"]').find('td:eq(1)').html(window.players[j].victoryPoints)
+    
+        
     prepForTurn = (j,r) ->
         gatherTokens(j,r)
         window.players[j].canAttack = true
@@ -157,8 +161,10 @@ $ ->
             for item, i in window.territories
                 if item.playerId == j
                     tokens = parseInt(item.playerTokens) - 1
+                    window.territories[i].playerTokens = 1
                     window.players[j].civilizations[r].totalTokens = window.players[j].civilizations[r].totalTokens + tokens
                     console.log('Pulling '+tokens+' tokens from territory '+item.id)
+                    debugTerritories(i,false)
             console.log(window.players[j].name+' has '+window.players[j].civilizations[r].totalTokens+' tokens')
     
 
@@ -239,6 +245,19 @@ $ ->
                 return true
         
 
+    debugTerritories = (index,start) ->
+        html = '<td>' + window.territories[index].id + '</td>'
+        html += '<td>'+window.territories[index].playerId+'</td>'
+        html += '<td>'+window.territories[index].totalTokens+'</td>'
+        html += '<td>'+window.territories[index].playerTokens+'</td>'
+        html += '<td>'+window.territories[index].type+'</td>'
+        
+        if start == true
+            $('#territoryTable').find('tbody:last').append('<tr data-id="'+index+'">'+html+'</tr>')
+        else
+            $("#territoryTable tbody").find('[data-id="'+index+'"]').html(html)
+        return
+        
     ###
     
          Loops to Build things
@@ -249,28 +268,18 @@ $ ->
     
     (showRacePowerStack(item,i) for item, i in window.racePowerStack)
 
-
+    (debugTerritories(i,true) for item, i in window.territories)
+    
     ###
          
          jQuery UI functions
          
     ###
- 
-    ###
-    $('.map').maphilight => {neverOn: true}
+
+
     $(".territory").bind 'hover', ->
         id = this.id.split("-")
         index = parseInt(id[1] - 1)
-        
-    $(".territory").bind 'click', ->
-        id = this.id.split("-")
-        index = parseInt(id[1] - 1)
-        
-        data = $('#'+this.id).data('maphilight') || {}
-        data.fillColor = "cccccc"
-        data.alwaysOn = true
-        $('#'+this.id).data('maphilight', data)
-    ###
 
     $(".territory").bind 'dblclick', ->
         id = this.id.split("-")

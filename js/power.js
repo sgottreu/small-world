@@ -33,6 +33,8 @@ Power = (function() {
 
   Power.prototype.attackStrength = function(territory, points) {};
 
+  Power.prototype.checkVictoryPoints = function(territory) {};
+
   return Power;
 
 })();
@@ -46,6 +48,10 @@ Alchemist = (function(_super) {
   }
 
   Alchemist.prototype.set = function() {};
+
+  Alchemist.prototype.checkVictoryPoints = function(territory) {
+    return this.coins;
+  };
 
   return Alchemist;
 
@@ -145,6 +151,16 @@ Forest = (function(_super) {
 
   Forest.prototype.set = function() {};
 
+  Forest.prototype.checkVictoryPoints = function(territory) {
+    var vPoints;
+    vPoints = 0;
+    if (territory.type === 'forest') {
+      return 1;
+    } else {
+      return 0;
+    }
+  };
+
   return Forest;
 
 })(Power);
@@ -187,6 +203,14 @@ Hill = (function(_super) {
 
   Hill.prototype.set = function() {};
 
+  Hill.prototype.checkVictoryPoints = function(territory) {
+    if (territory.type === 'hill') {
+      return 1;
+    } else {
+      return 0;
+    }
+  };
+
   return Hill;
 
 })(Power);
@@ -200,6 +224,10 @@ Merchant = (function(_super) {
   }
 
   Merchant.prototype.set = function() {};
+
+  Merchant.prototype.checkVictoryPoints = function(territory) {
+    return 1;
+  };
 
   return Merchant;
 
@@ -285,6 +313,14 @@ Swamp = (function(_super) {
 
   Swamp.prototype.set = function() {};
 
+  Swamp.prototype.checkVictoryPoints = function(territory) {
+    if (territory.type === 'swamp') {
+      return 1;
+    } else {
+      return 0;
+    }
+  };
+
   return Swamp;
 
 })(Power);
@@ -322,6 +358,14 @@ Wealthy = (function(_super) {
   }
 
   Wealthy.prototype.set = function() {};
+
+  Wealthy.prototype.checkVictoryPoints = function(territory) {
+    if (window.currentRound === 1) {
+      return 7;
+    } else {
+      return 0;
+    }
+  };
 
   return Wealthy;
 
