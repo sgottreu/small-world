@@ -18,6 +18,7 @@ class Power
     attackStrength: (territory, points) ->
     
     checkVictoryPoints: (territory) ->
+        return 0
 
 class Alchemist extends Power 
     set: ->        

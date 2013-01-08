@@ -33,7 +33,9 @@ Power = (function() {
 
   Power.prototype.attackStrength = function(territory, points) {};
 
-  Power.prototype.checkVictoryPoints = function(territory) {};
+  Power.prototype.checkVictoryPoints = function(territory) {
+    return 0;
+  };
 
   return Power;
 
