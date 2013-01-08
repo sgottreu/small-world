@@ -39,7 +39,6 @@ class Flying extends Power
 class Forest extends Power 
     set: ->
     checkVictoryPoints: (territory) ->
-        vPoints = 0
         if territory.type == 'forest'
             return 1
         else 

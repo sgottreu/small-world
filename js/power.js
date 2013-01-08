@@ -154,8 +154,6 @@ Forest = (function(_super) {
   Forest.prototype.set = function() {};
 
   Forest.prototype.checkVictoryPoints = function(territory) {
-    var vPoints;
-    vPoints = 0;
     if (territory.type === 'forest') {
       return 1;
     } else {

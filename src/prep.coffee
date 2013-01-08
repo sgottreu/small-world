@@ -62,7 +62,8 @@ $ ->
     setTerritoryForPlayer = (j,r,index,tokens) ->
         window.territories[index].playerTokens = tokens
         window.territories[index].playerId = j
-        window.territories[index].playerTerritory = window.players[j].territory.length
+        
+        window.territories[index].nonEmpty = true
         
         window.players[j].territory.push(window.territories[index])
   
@@ -145,10 +146,13 @@ $ ->
 
     
     calculateVictoryPoints = (j,r) ->
+        nonEmpty = 0
         for item, i in window.territories
             if item.playerId == j
                 window.players[j].victoryPoints++
                 window.players[j].victoryPoints += window.players[j].civilizations[r].power.checkVictoryPoints(item)
+                if window.territories.nonEmpty[j] && (window.players[j].civilizations[r].race.name = 'Orcs' || window.players[j].civilizations[r].power.name == 'Pillaging')
+                    window.players[j].victoryPoints++
         $("#playerTable tbody").find('[data-id="'+j+'"]').find('td:eq(1)').html(window.players[j].victoryPoints)
     
         
@@ -230,15 +234,24 @@ $ ->
     territoryAttack = (j,r,index) =>
         if window.players[j].civilizations[r].startRound
             
-            if window.territories[index].edgeBorder
+            if window.territories[index].edgeBorder && !window.territories[index].isWater
                 window.players[j].canAttack = attackTerritory(j,r,index)
             else
-                console.log('You must chose a territory on the edge.')
+                if window.territories[index].edgeBorder && window.territories[index].isWater && window.players[j].civilizations[r].power.name == 'Seafaring' 
+                    window.players[j].canAttack = attackTerritory(j,r,index)
+                else if window.players[j].civilizations[r].power.name == 'Flying'
+                    window.players[j].canAttack = attackTerritory(j,r,index)
+                else
+                    console.log('You must chose a territory on the edge.')
                 return true
             
 
         else
-            if window.territories[index].isAdjacent(window.players[j].territory)
+            if window.territories[index].isAdjacent(window.players[j].territory) && !window.territories[index].isWater
+                window.players[j].canAttack = attackTerritory(j,r,index)
+            else if window.territories[index].edgeBorder && window.territories[index].isWater && window.players[j].civilizations[r].power.name == 'Seafaring' 
+                window.players[j].canAttack = attackTerritory(j,r,index)
+            else if window.players[j].civilizations[r].power.name == 'Flying'
                 window.players[j].canAttack = attackTerritory(j,r,index)
             else
                 console.log('That territory is not adjacent.') 
@@ -253,6 +266,11 @@ $ ->
         html += '<td>'+window.territories[index].type+'</td>'
         
         if start == true
+            for item, i in window.players 
+                if window.territories[index].lostTribe
+                    window.territories[index].nonEmpty[i] = true
+                else 
+                    window.territories[index].nonEmpty[i] = false
             $('#territoryTable').find('tbody:last').append('<tr data-id="'+index+'">'+html+'</tr>')
         else
             $("#territoryTable tbody").find('[data-id="'+index+'"]').html(html)

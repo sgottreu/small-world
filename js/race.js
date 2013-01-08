@@ -1,4 +1,6 @@
-var Race;
+var Amazons, Dwarves, Elves, Ghouls, Giants, Halflings, Humans, Orcs, Race, Ratmen, Skeletons, Sorcerers, Tritons, Trolls, Wizards,
+  __hasProp = {}.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
 Race = (function() {
 
@@ -20,9 +22,249 @@ Race = (function() {
     this.data = null;
   }
 
+  Race.prototype.checkVictoryPoints = function(territory) {
+    return 0;
+  };
+
   return Race;
 
 })();
+
+Amazons = (function(_super) {
+
+  __extends(Amazons, _super);
+
+  function Amazons() {
+    return Amazons.__super__.constructor.apply(this, arguments);
+  }
+
+  Amazons.prototype.checkVictoryPoints = function(territory) {
+    return 0;
+  };
+
+  return Amazons;
+
+})(Race);
+
+Dwarves = (function(_super) {
+
+  __extends(Dwarves, _super);
+
+  function Dwarves() {
+    return Dwarves.__super__.constructor.apply(this, arguments);
+  }
+
+  Dwarves.prototype.checkVictoryPoints = function(territory) {
+    if (territory.isMine) {
+      return 1;
+    } else {
+      return 0;
+    }
+  };
+
+  return Dwarves;
+
+})(Race);
+
+Elves = (function(_super) {
+
+  __extends(Elves, _super);
+
+  function Elves() {
+    return Elves.__super__.constructor.apply(this, arguments);
+  }
+
+  Elves.prototype.checkVictoryPoints = function(territory) {
+    return 0;
+  };
+
+  return Elves;
+
+})(Race);
+
+Ghouls = (function(_super) {
+
+  __extends(Ghouls, _super);
+
+  function Ghouls() {
+    return Ghouls.__super__.constructor.apply(this, arguments);
+  }
+
+  Ghouls.prototype.checkVictoryPoints = function(territory) {
+    return 0;
+  };
+
+  return Ghouls;
+
+})(Race);
+
+Ratmen = (function(_super) {
+
+  __extends(Ratmen, _super);
+
+  function Ratmen() {
+    return Ratmen.__super__.constructor.apply(this, arguments);
+  }
+
+  Ratmen.prototype.checkVictoryPoints = function(territory) {
+    return 0;
+  };
+
+  return Ratmen;
+
+})(Race);
+
+Skeletons = (function(_super) {
+
+  __extends(Skeletons, _super);
+
+  function Skeletons() {
+    return Skeletons.__super__.constructor.apply(this, arguments);
+  }
+
+  Skeletons.prototype.checkVictoryPoints = function(territory) {
+    return 0;
+  };
+
+  return Skeletons;
+
+})(Race);
+
+Sorcerers = (function(_super) {
+
+  __extends(Sorcerers, _super);
+
+  function Sorcerers() {
+    return Sorcerers.__super__.constructor.apply(this, arguments);
+  }
+
+  Sorcerers.prototype.checkVictoryPoints = function(territory) {
+    return 0;
+  };
+
+  return Sorcerers;
+
+})(Race);
+
+Tritons = (function(_super) {
+
+  __extends(Tritons, _super);
+
+  function Tritons() {
+    return Tritons.__super__.constructor.apply(this, arguments);
+  }
+
+  Tritons.prototype.checkVictoryPoints = function(territory) {
+    return 0;
+  };
+
+  return Tritons;
+
+})(Race);
+
+Giants = (function(_super) {
+
+  __extends(Giants, _super);
+
+  function Giants() {
+    return Giants.__super__.constructor.apply(this, arguments);
+  }
+
+  Giants.prototype.checkVictoryPoints = function(territory) {
+    return 0;
+  };
+
+  return Giants;
+
+})(Race);
+
+Halflings = (function(_super) {
+
+  __extends(Halflings, _super);
+
+  function Halflings() {
+    return Halflings.__super__.constructor.apply(this, arguments);
+  }
+
+  Halflings.prototype.checkVictoryPoints = function(territory) {
+    return 0;
+  };
+
+  return Halflings;
+
+})(Race);
+
+Humans = (function(_super) {
+
+  __extends(Humans, _super);
+
+  function Humans() {
+    return Humans.__super__.constructor.apply(this, arguments);
+  }
+
+  Humans.prototype.checkVictoryPoints = function(territory) {
+    if (territory.type === 'farm') {
+      return 1;
+    } else {
+      return 0;
+    }
+  };
+
+  return Humans;
+
+})(Race);
+
+Orcs = (function(_super) {
+
+  __extends(Orcs, _super);
+
+  function Orcs() {
+    return Orcs.__super__.constructor.apply(this, arguments);
+  }
+
+  Orcs.prototype.checkVictoryPoints = function(territory) {
+    return 0;
+  };
+
+  return Orcs;
+
+})(Race);
+
+Trolls = (function(_super) {
+
+  __extends(Trolls, _super);
+
+  function Trolls() {
+    return Trolls.__super__.constructor.apply(this, arguments);
+  }
+
+  Trolls.prototype.checkVictoryPoints = function(territory) {
+    return 0;
+  };
+
+  return Trolls;
+
+})(Race);
+
+Wizards = (function(_super) {
+
+  __extends(Wizards, _super);
+
+  function Wizards() {
+    return Wizards.__super__.constructor.apply(this, arguments);
+  }
+
+  Wizards.prototype.checkVictoryPoints = function(territory) {
+    if (territory.isMagic) {
+      return 1;
+    } else {
+      return 0;
+    }
+  };
+
+  return Wizards;
+
+})(Race);
 
 window.races = [
   new Race({

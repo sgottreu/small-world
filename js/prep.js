@@ -56,7 +56,7 @@ $(function() {
   setTerritoryForPlayer = function(j, r, index, tokens) {
     window.territories[index].playerTokens = tokens;
     window.territories[index].playerId = j;
-    window.territories[index].playerTerritory = window.players[j].territory.length;
+    window.territories[index].nonEmpty = true;
     return window.players[j].territory.push(window.territories[index]);
   };
   attackTerritory = function(j, r, index) {
@@ -132,13 +132,17 @@ $(function() {
     return j;
   };
   calculateVictoryPoints = function(j, r) {
-    var i, item, _i, _len, _ref;
+    var i, item, nonEmpty, _i, _len, _ref;
+    nonEmpty = 0;
     _ref = window.territories;
     for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
       item = _ref[i];
       if (item.playerId === j) {
         window.players[j].victoryPoints++;
         window.players[j].victoryPoints += window.players[j].civilizations[r].power.checkVictoryPoints(item);
+        if (window.territories.nonEmpty[j] && (window.players[j].civilizations[r].race.name = 'Orcs' || window.players[j].civilizations[r].power.name === 'Pillaging')) {
+          window.players[j].victoryPoints++;
+        }
       }
     }
     return $("#playerTable tbody").find('[data-id="' + j + '"]').find('td:eq(1)').html(window.players[j].victoryPoints);
@@ -219,14 +223,24 @@ $(function() {
   };
   territoryAttack = function(j, r, index) {
     if (window.players[j].civilizations[r].startRound) {
-      if (window.territories[index].edgeBorder) {
+      if (window.territories[index].edgeBorder && !window.territories[index].isWater) {
         return window.players[j].canAttack = attackTerritory(j, r, index);
       } else {
-        console.log('You must chose a territory on the edge.');
+        if (window.territories[index].edgeBorder && window.territories[index].isWater && window.players[j].civilizations[r].power.name === 'Seafaring') {
+          window.players[j].canAttack = attackTerritory(j, r, index);
+        } else if (window.players[j].civilizations[r].power.name === 'Flying') {
+          window.players[j].canAttack = attackTerritory(j, r, index);
+        } else {
+          console.log('You must chose a territory on the edge.');
+        }
         return true;
       }
     } else {
-      if (window.territories[index].isAdjacent(window.players[j].territory)) {
+      if (window.territories[index].isAdjacent(window.players[j].territory) && !window.territories[index].isWater) {
+        return window.players[j].canAttack = attackTerritory(j, r, index);
+      } else if (window.territories[index].edgeBorder && window.territories[index].isWater && window.players[j].civilizations[r].power.name === 'Seafaring') {
+        return window.players[j].canAttack = attackTerritory(j, r, index);
+      } else if (window.players[j].civilizations[r].power.name === 'Flying') {
         return window.players[j].canAttack = attackTerritory(j, r, index);
       } else {
         console.log('That territory is not adjacent.');
@@ -235,13 +249,22 @@ $(function() {
     }
   };
   debugTerritories = function(index, start) {
-    var html;
+    var html, i, item, _i, _len, _ref;
     html = '<td>' + window.territories[index].id + '</td>';
     html += '<td>' + window.territories[index].playerId + '</td>';
     html += '<td>' + window.territories[index].totalTokens + '</td>';
     html += '<td>' + window.territories[index].playerTokens + '</td>';
     html += '<td>' + window.territories[index].type + '</td>';
     if (start === true) {
+      _ref = window.players;
+      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+        item = _ref[i];
+        if (window.territories[index].lostTribe) {
+          window.territories[index].nonEmpty[i] = true;
+        } else {
+          window.territories[index].nonEmpty[i] = false;
+        }
+      }
       $('#territoryTable').find('tbody:last').append('<tr data-id="' + index + '">' + html + '</tr>');
     } else {
       $("#territoryTable tbody").find('[data-id="' + index + '"]').html(html);
