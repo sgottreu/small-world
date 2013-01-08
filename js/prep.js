@@ -122,11 +122,15 @@ $(function() {
     if (window.currentPlayer > window.players.length) {
       console.log('Concluding Round ' + window.currentRound);
       window.currentRound++;
-      console.log('Starting Round ' + window.currentRound);
-      window.currentPlayer = 1;
-      j = window.currentPlayer - 1;
-      console.log('Current player is ' + window.players[j].name + '.');
-      prepForTurn(j, r);
+      if (window.currentRound > window.gameRound) {
+        console.log('Game over');
+      } else {
+        console.log('Starting Round ' + window.currentRound);
+        window.currentPlayer = 1;
+        j = window.currentPlayer - 1;
+        console.log('Current player is ' + window.players[j].name + '.');
+        prepForTurn(j, r);
+      }
     } else {
       j = window.currentPlayer - 1;
       console.log('Current player is ' + window.players[j].name + '.');
