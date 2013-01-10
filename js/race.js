@@ -1,6 +1,7 @@
 var Amazons, Dwarves, Elves, Ghouls, Giants, Halflings, Humans, Orcs, Race, Ratmen, Skeletons, Sorcerers, Tritons, Trolls, Wizards,
   __hasProp = {}.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 Race = (function() {
 
@@ -22,6 +23,10 @@ Race = (function() {
     this.data = null;
   }
 
+  Race.prototype.attackStrength = function(points) {
+    return points;
+  };
+
   Race.prototype.checkVictoryPoints = function(points) {
     console.log('Returning Race Victory points');
     return points;
@@ -39,6 +44,10 @@ Amazons = (function(_super) {
     return Amazons.__super__.constructor.apply(this, arguments);
   }
 
+  Amazons.prototype.attackStrength = function(territory, j) {
+    return Amazons.__super__.attackStrength.call(this, 0);
+  };
+
   Amazons.prototype.checkVictoryPoints = function(territory, j) {
     return Amazons.__super__.checkVictoryPoints.call(this, 0);
   };
@@ -54,6 +63,10 @@ Dwarves = (function(_super) {
   function Dwarves() {
     return Dwarves.__super__.constructor.apply(this, arguments);
   }
+
+  Dwarves.prototype.attackStrength = function(territory, j) {
+    return Dwarves.__super__.attackStrength.call(this, 0);
+  };
 
   Dwarves.prototype.checkVictoryPoints = function(territory, j) {
     if (territory.isMine) {
@@ -75,6 +88,10 @@ Elves = (function(_super) {
     return Elves.__super__.constructor.apply(this, arguments);
   }
 
+  Elves.prototype.attackStrength = function(territory, j) {
+    return Elves.__super__.attackStrength.call(this, 0);
+  };
+
   Elves.prototype.checkVictoryPoints = function(territory, j) {
     return Elves.__super__.checkVictoryPoints.call(this, 0);
   };
@@ -90,6 +107,10 @@ Ghouls = (function(_super) {
   function Ghouls() {
     return Ghouls.__super__.constructor.apply(this, arguments);
   }
+
+  Ghouls.prototype.attackStrength = function(territory, j) {
+    return Ghouls.__super__.attackStrength.call(this, 0);
+  };
 
   Ghouls.prototype.checkVictoryPoints = function(territory, j) {
     return Ghouls.__super__.checkVictoryPoints.call(this, 0);
@@ -107,6 +128,10 @@ Ratmen = (function(_super) {
     return Ratmen.__super__.constructor.apply(this, arguments);
   }
 
+  Ratmen.prototype.attackStrength = function(territory, j) {
+    return Ratmen.__super__.attackStrength.call(this, 0);
+  };
+
   Ratmen.prototype.checkVictoryPoints = function(territory, j) {
     return Ratmen.__super__.checkVictoryPoints.call(this, 0);
   };
@@ -122,6 +147,10 @@ Skeletons = (function(_super) {
   function Skeletons() {
     return Skeletons.__super__.constructor.apply(this, arguments);
   }
+
+  Skeletons.prototype.attackStrength = function(territory, j) {
+    return Skeletons.__super__.attackStrength.call(this, 0);
+  };
 
   Skeletons.prototype.checkVictoryPoints = function(territory, j) {
     return Skeletons.__super__.checkVictoryPoints.call(this, 0);
@@ -139,6 +168,10 @@ Sorcerers = (function(_super) {
     return Sorcerers.__super__.constructor.apply(this, arguments);
   }
 
+  Sorcerers.prototype.attackStrength = function(territory, j) {
+    return Sorcerers.__super__.attackStrength.call(this, 0);
+  };
+
   Sorcerers.prototype.checkVictoryPoints = function(territory, j) {
     return Sorcerers.__super__.checkVictoryPoints.call(this, 0);
   };
@@ -154,6 +187,10 @@ Tritons = (function(_super) {
   function Tritons() {
     return Tritons.__super__.constructor.apply(this, arguments);
   }
+
+  Tritons.prototype.attackStrength = function(territory, j) {
+    return Tritons.__super__.attackStrength.call(this, 0);
+  };
 
   Tritons.prototype.checkVictoryPoints = function(territory, j) {
     return Tritons.__super__.checkVictoryPoints.call(this, 0);
@@ -171,6 +208,18 @@ Giants = (function(_super) {
     return Giants.__super__.constructor.apply(this, arguments);
   }
 
+  Giants.prototype.attackStrength = function(territory, j) {
+    var i, item, _i, _len, _ref;
+    _ref = territory.adjacent;
+    for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+      item = _ref[i];
+      if (territory.mountainBorder && window.territories[item - 1].mountain && window.territories[item - 1].playerId === j) {
+        return Giants.__super__.attackStrength.call(this, -1);
+      }
+    }
+    return Giants.__super__.attackStrength.call(this, 0);
+  };
+
   Giants.prototype.checkVictoryPoints = function(territory, j) {
     return Giants.__super__.checkVictoryPoints.call(this, 0);
   };
@@ -187,6 +236,10 @@ Halflings = (function(_super) {
     return Halflings.__super__.constructor.apply(this, arguments);
   }
 
+  Halflings.prototype.attackStrength = function(territory, j) {
+    return Halflings.__super__.attackStrength.call(this, 0);
+  };
+
   Halflings.prototype.checkVictoryPoints = function(territory, j) {
     return Halflings.__super__.checkVictoryPoints.call(this, 0);
   };
@@ -202,6 +255,10 @@ Humans = (function(_super) {
   function Humans() {
     return Humans.__super__.constructor.apply(this, arguments);
   }
+
+  Humans.prototype.attackStrength = function(territory, j) {
+    return Humans.__super__.attackStrength.call(this, 0);
+  };
 
   Humans.prototype.checkVictoryPoints = function(territory, j) {
     if (territory.type === 'farm') {
@@ -223,6 +280,10 @@ Orcs = (function(_super) {
   function Orcs() {
     return Orcs.__super__.constructor.apply(this, arguments);
   }
+
+  Orcs.prototype.attackStrength = function(territory, j) {
+    return Orcs.__super__.attackStrength.call(this, 0);
+  };
 
   Orcs.prototype.checkVictoryPoints = function(territory, j) {
     console.log('Calculating Orc Victory points');
@@ -246,6 +307,10 @@ Trolls = (function(_super) {
     return Trolls.__super__.constructor.apply(this, arguments);
   }
 
+  Trolls.prototype.attackStrength = function(territory, j) {
+    return Trolls.__super__.attackStrength.call(this, 0);
+  };
+
   Trolls.prototype.checkVictoryPoints = function(territory, j) {
     return Trolls.__super__.checkVictoryPoints.call(this, 0);
   };
@@ -259,8 +324,13 @@ Wizards = (function(_super) {
   __extends(Wizards, _super);
 
   function Wizards() {
+    this.checkVictoryPoints = __bind(this.checkVictoryPoints, this);
     return Wizards.__super__.constructor.apply(this, arguments);
   }
+
+  Wizards.prototype.attackStrength = function(territory, j) {
+    return Wizards.__super__.attackStrength.call(this, 0);
+  };
 
   Wizards.prototype.checkVictoryPoints = function(territory, j) {
     if (territory.isMagic) {

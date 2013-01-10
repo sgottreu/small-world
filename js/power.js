@@ -31,7 +31,9 @@ Power = (function() {
     return this.data = null;
   };
 
-  Power.prototype.attackStrength = function(territory, points) {};
+  Power.prototype.attackStrength = function(points) {
+    return points;
+  };
 
   Power.prototype.checkVictoryPoints = function(points) {
     console.log('Returning Power Victory points');
@@ -52,6 +54,10 @@ Alchemist = (function(_super) {
 
   Alchemist.prototype.set = function() {};
 
+  Alchemist.prototype.attackStrength = function(territory, j) {
+    return Alchemist.__super__.attackStrength.call(this, 0);
+  };
+
   Alchemist.prototype.checkVictoryPoints = function(territory, j) {
     return Alchemist.__super__.checkVictoryPoints.call(this, this.coins);
   };
@@ -69,6 +75,10 @@ Berserk = (function(_super) {
   }
 
   Berserk.prototype.set = function() {};
+
+  Berserk.prototype.attackStrength = function(territory, j) {
+    return Berserk.__super__.attackStrength.call(this, 0);
+  };
 
   Berserk.prototype.checkVictoryPoints = function(territory, j) {
     return Berserk.__super__.checkVictoryPoints.call(this, 0);
@@ -88,6 +98,10 @@ Bivouacking = (function(_super) {
 
   Bivouacking.prototype.set = function() {};
 
+  Bivouacking.prototype.attackStrength = function(territory, j) {
+    return Bivouacking.__super__.attackStrength.call(this, 0);
+  };
+
   Bivouacking.prototype.checkVictoryPoints = function(territory, j) {
     return Bivouacking.__super__.checkVictoryPoints.call(this, 0);
   };
@@ -105,6 +119,10 @@ Commando = (function(_super) {
   }
 
   Commando.prototype.set = function() {};
+
+  Commando.prototype.attackStrength = function(territory, j) {
+    return Commando.__super__.attackStrength.call(this, 0);
+  };
 
   Commando.prototype.checkVictoryPoints = function(territory, j) {
     return Commando.__super__.checkVictoryPoints.call(this, 0);
@@ -124,6 +142,10 @@ Diplomat = (function(_super) {
 
   Diplomat.prototype.set = function() {};
 
+  Diplomat.prototype.attackStrength = function(territory, j) {
+    return Diplomat.__super__.attackStrength.call(this, 0);
+  };
+
   Diplomat.prototype.checkVictoryPoints = function(territory, j) {
     return Diplomat.__super__.checkVictoryPoints.call(this, 0);
   };
@@ -141,6 +163,10 @@ DragonMaster = (function(_super) {
   }
 
   DragonMaster.prototype.set = function() {};
+
+  DragonMaster.prototype.attackStrength = function(territory, j) {
+    return DragonMaster.__super__.attackStrength.call(this, 0);
+  };
 
   DragonMaster.prototype.checkVictoryPoints = function(territory, j) {
     return DragonMaster.__super__.checkVictoryPoints.call(this, 0);
@@ -160,6 +186,10 @@ Flying = (function(_super) {
 
   Flying.prototype.set = function() {};
 
+  Flying.prototype.attackStrength = function(territory, j) {
+    return Flying.__super__.attackStrength.call(this, 0);
+  };
+
   Flying.prototype.checkVictoryPoints = function(territory, j) {
     return Flying.__super__.checkVictoryPoints.call(this, 0);
   };
@@ -178,12 +208,17 @@ Forest = (function(_super) {
 
   Forest.prototype.set = function() {};
 
+  Forest.prototype.attackStrength = function(territory, j) {
+    return Forest.__super__.attackStrength.call(this, 0);
+  };
+
   Forest.prototype.checkVictoryPoints = function(territory, j) {
     if (territory.type === 'forest') {
-      return Forest.__super__.checkVictoryPoints.call(this, 1);
+      Forest.__super__.checkVictoryPoints.call(this, 1);
     } else {
-      return Forest.__super__.checkVictoryPoints.call(this, 0);
+
     }
+    return Forest.__super__.checkVictoryPoints.call(this, 0);
   };
 
   return Forest;
@@ -199,6 +234,10 @@ Fortified = (function(_super) {
   }
 
   Fortified.prototype.set = function() {};
+
+  Fortified.prototype.attackStrength = function(territory, j) {
+    return Fortified.__super__.attackStrength.call(this, 0);
+  };
 
   Fortified.prototype.checkVictoryPoints = function(territory, j) {
     return Fortified.__super__.checkVictoryPoints.call(this, 0);
@@ -218,6 +257,10 @@ Heroic = (function(_super) {
 
   Heroic.prototype.set = function() {};
 
+  Heroic.prototype.attackStrength = function(territory, j) {
+    return Heroic.__super__.attackStrength.call(this, 0);
+  };
+
   Heroic.prototype.checkVictoryPoints = function(territory, j) {
     return Heroic.__super__.checkVictoryPoints.call(this, 0);
   };
@@ -236,12 +279,17 @@ Hill = (function(_super) {
 
   Hill.prototype.set = function() {};
 
+  Hill.prototype.attackStrength = function(territory, j) {
+    return Hill.__super__.attackStrength.call(this, 0);
+  };
+
   Hill.prototype.checkVictoryPoints = function(territory, j) {
     if (territory.type === 'hill') {
-      return Hill.__super__.checkVictoryPoints.call(this, 1);
+      Hill.__super__.checkVictoryPoints.call(this, 1);
     } else {
-      return Hill.__super__.checkVictoryPoints.call(this, 0);
+
     }
+    return Hill.__super__.checkVictoryPoints.call(this, 0);
   };
 
   return Hill;
@@ -257,6 +305,10 @@ Merchant = (function(_super) {
   }
 
   Merchant.prototype.set = function() {};
+
+  Merchant.prototype.attackStrength = function(territory, j) {
+    return Merchant.__super__.attackStrength.call(this, 0);
+  };
 
   Merchant.prototype.checkVictoryPoints = function(territory, j) {
     return Merchant.__super__.checkVictoryPoints.call(this, 1);
@@ -276,6 +328,10 @@ Mounted = (function(_super) {
 
   Mounted.prototype.set = function() {};
 
+  Mounted.prototype.attackStrength = function(territory, j) {
+    return Mounted.__super__.attackStrength.call(this, 0);
+  };
+
   Mounted.prototype.checkVictoryPoints = function(territory, j) {
     return Mounted.__super__.checkVictoryPoints.call(this, 0);
   };
@@ -294,14 +350,19 @@ Pillaging = (function(_super) {
 
   Pillaging.prototype.set = function() {};
 
+  Pillaging.prototype.attackStrength = function(territory, j) {
+    return Pillaging.__super__.attackStrength.call(this, 0);
+  };
+
   Pillaging.prototype.checkVictoryPoints = function(territory, j) {
     console.log('Calculating Pillaging Victory points');
     if (territory.nonEmpty[j] === true) {
       console.log('+1 for non-Empty Territory ' + territory.id);
-      return Pillaging.__super__.checkVictoryPoints.call(this, 1);
+      Pillaging.__super__.checkVictoryPoints.call(this, 1);
     } else {
-      return Pillaging.__super__.checkVictoryPoints.call(this, 0);
+
     }
+    return Pillaging.__super__.checkVictoryPoints.call(this, 0);
   };
 
   return Pillaging;
@@ -317,6 +378,10 @@ Seafaring = (function(_super) {
   }
 
   Seafaring.prototype.set = function() {};
+
+  Seafaring.prototype.attackStrength = function(territory, j) {
+    return Seafaring.__super__.attackStrength.call(this, 0);
+  };
 
   Seafaring.prototype.checkVictoryPoints = function(territory, j) {
     return Seafaring.__super__.checkVictoryPoints.call(this, 0);
@@ -336,6 +401,10 @@ Spirit = (function(_super) {
 
   Spirit.prototype.set = function() {};
 
+  Spirit.prototype.attackStrength = function(territory, j) {
+    return Spirit.__super__.attackStrength.call(this, 0);
+  };
+
   Spirit.prototype.checkVictoryPoints = function(territory, j) {
     return Spirit.__super__.checkVictoryPoints.call(this, 0);
   };
@@ -353,6 +422,10 @@ Stout = (function(_super) {
   }
 
   Stout.prototype.set = function() {};
+
+  Stout.prototype.attackStrength = function(territory, j) {
+    return Stout.__super__.attackStrength.call(this, 0);
+  };
 
   Stout.prototype.checkVictoryPoints = function(territory, j) {
     return Stout.__super__.checkVictoryPoints.call(this, 0);
@@ -372,12 +445,17 @@ Swamp = (function(_super) {
 
   Swamp.prototype.set = function() {};
 
+  Swamp.prototype.attackStrength = function(territory, j) {
+    return Swamp.__super__.attackStrength.call(this, 0);
+  };
+
   Swamp.prototype.checkVictoryPoints = function(territory, j) {
     if (territory.type === 'swamp') {
-      return Swamp.__super__.checkVictoryPoints.call(this, 1);
+      Swamp.__super__.checkVictoryPoints.call(this, 1);
     } else {
-      return Swamp.__super__.checkVictoryPoints.call(this, 0);
+
     }
+    return Swamp.__super__.checkVictoryPoints.call(this, 0);
   };
 
   return Swamp;
@@ -394,14 +472,13 @@ Underworld = (function(_super) {
 
   Underworld.prototype.set = function() {};
 
-  Underworld.prototype.attackStrength = function(territory, points) {
-    var adjusted;
+  Underworld.prototype.attackStrength = function(territory, j) {
     if (territory.isUnderworld) {
-      adjusted = points - 1;
+      Underworld.__super__.attackStrength.call(this, -1);
     } else {
-      adjusted = points;
+
     }
-    return adjusted;
+    return Underworld.__super__.attackStrength.call(this, 0);
   };
 
   Underworld.prototype.checkVictoryPoints = function(territory, j) {
@@ -422,12 +499,17 @@ Wealthy = (function(_super) {
 
   Wealthy.prototype.set = function() {};
 
+  Wealthy.prototype.attackStrength = function(territory, j) {
+    return Wealthy.__super__.attackStrength.call(this, 0);
+  };
+
   Wealthy.prototype.checkVictoryPoints = function(territory, j) {
     if (window.currentRound === 1) {
-      return Wealthy.__super__.checkVictoryPoints.call(this, 7);
+      Wealthy.__super__.checkVictoryPoints.call(this, 7);
     } else {
-      return Wealthy.__super__.checkVictoryPoints.call(this, 0);
+
     }
+    return Wealthy.__super__.checkVictoryPoints.call(this, 0);
   };
 
   return Wealthy;

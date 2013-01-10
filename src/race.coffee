@@ -11,52 +11,97 @@ class Race
         for key, value of @data
             this[key] = value
         @data = null
+    
+    attackStrength: (points) ->
+        return points
+        
     checkVictoryPoints: (points) ->
         console.log('Returning Race Victory points')
         return points
 
 class Amazons extends Race 
-    checkVictoryPoints: (territory, j) ->  
-        super 0
+  attackStrength: (territory, j) ->
+    super 0
+
+  checkVictoryPoints: (territory, j) ->
+    super 0
+
+
 class Dwarves extends Race 
-    checkVictoryPoints: (territory, j) ->  
+  attackStrength: (territory, j) ->
+        super 0
+  checkVictoryPoints: (territory, j) ->
         if territory.isMine
             super 1
         else 
             super 0
 class Elves extends Race 
-    checkVictoryPoints: (territory, j) ->  
+  attackStrength: (territory, j) ->
+        super 0
+  checkVictoryPoints: (territory, j) ->
+  
         super 0
 class Ghouls extends Race 
-    checkVictoryPoints: (territory, j) ->  
+  attackStrength: (territory, j) ->
+        super 0
+  checkVictoryPoints: (territory, j) ->
+  
         super 0
 class Ratmen extends Race 
-    checkVictoryPoints: (territory, j) ->  
+  attackStrength: (territory, j) ->
+        super 0
+  checkVictoryPoints: (territory, j) ->
+  
         super 0
 class Skeletons extends Race 
-    checkVictoryPoints: (territory, j) ->  
+  attackStrength: (territory, j) ->
+        super 0
+  checkVictoryPoints: (territory, j) ->
+  
         super 0  
 class Sorcerers extends Race 
-    checkVictoryPoints: (territory, j) ->  
+  attackStrength: (territory, j) ->
+        super 0
+  checkVictoryPoints: (territory, j) ->
+  
         super 0
 class Tritons extends Race 
-    checkVictoryPoints: (territory, j) ->  
+  attackStrength: (territory, j) ->
+        super 0
+  checkVictoryPoints: (territory, j) ->
+  
         super 0
 class Giants extends Race 
-    checkVictoryPoints: (territory, j) ->  
+  attackStrength: (territory, j) ->
+        for item, i in territory.adjacent
+            if territory.mountainBorder && window.territories[item-1].mountain && window.territories[item-1].playerId == j
+                return super -1
+        super 0
+
+  checkVictoryPoints: (territory, j) ->
+  
         super 0
 class Halflings extends Race 
-    checkVictoryPoints: (territory, j) ->  
+  attackStrength: (territory, j) ->
+        super 0
+  checkVictoryPoints: (territory, j) ->
+  
         super 0
 class Humans extends Race 
-    checkVictoryPoints: (territory, j) ->  
+  attackStrength: (territory, j) ->
+        super 0
+  checkVictoryPoints: (territory, j) ->
+  
         if territory.type == 'farm'
             console.log('+1 for Territory '+territory.id+ ' which is farm')
             super 1
         else
             super 0
 class Orcs extends Race 
-    checkVictoryPoints: (territory, j) ->
+  attackStrength: (territory, j) ->
+        super 0
+  checkVictoryPoints: (territory, j) ->
+
         console.log('Calculating Orc Victory points')
         if territory.nonEmpty[j] == true 
             console.log('+1 for non-Empty Territory '+territory.id)
@@ -64,15 +109,21 @@ class Orcs extends Race
         else 
             super 0
 class Trolls extends Race 
-    checkVictoryPoints: (territory, j) ->  
+  attackStrength: (territory, j) ->
         super 0
+  checkVictoryPoints: (territory, j) ->
+        super 0
+        
 class Wizards extends Race 
-    checkVictoryPoints: (territory, j) ->  
+  attackStrength: (territory, j) ->
+        super 0
+  checkVictoryPoints: (territory, j) =>
         if territory.isMagic
             super 1
         else 
             super 0
-         
+
+
 window.races = [
     new Amazons {name:'Amazons', totalAvailTokens:15, startingTokens:6}
     new Dwarves {name:'Dwarves', totalAvailTokens:8, startingTokens:3}

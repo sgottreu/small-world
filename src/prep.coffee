@@ -19,7 +19,6 @@ $ ->
     
     aiTurn = () ->
         if window.currentRound > window.gameRounds
-            console.log('Game over')
             return false
         else
             j = window.currentPlayer-1
@@ -99,10 +98,15 @@ $ ->
             next = changePlayer(j,r)
             checkAI(next)
             return false
+            
+        if window.territories[index].playerId == j && window.territories[index].playerCivilization == r
+            console.log('----You cannot attack territory of the same race')
+            return true
         
         console.log(window.players[j].name+' Current Tokens: ', window.players[j].civilizations[r].totalTokens)
-            
-        needed = window.territories[index].tokensNeeded()
+        
+        needed = getAttackStrength(window.territories[index],j,r)
+
         console.log('Number of Tokens needed to attack', needed)
         
         console.log(window.players[j].name+' is attacking territory: '+window.territories[index].id)
@@ -139,12 +143,29 @@ $ ->
                     checkAI(next)
                     return false
 
+    getAttackStrength = (territory,j,r) ->
+        points = territory.tokensNeeded()
+        points += window.players[j].civilizations[r].race.attackStrength(territory, j)
+        points += window.players[j].civilizations[r].power.attackStrength(territory, j)
+        points
+
     checkAI = (j) ->
         if (window.players[j].playerType == 'ai')
             aiTurn()
             return true
         return false
 
+    declareWinner = () ->
+        console.log('The game is over')
+        winnerTotal = 0
+        winnerName = ''
+        for item, i in window.players
+            if item.victoryPoints > 0
+                winnerTotal = item.victoryPoints
+                winnerName = item.name
+        
+        console.log(winnerName+' won with '+winnerTotal+' Victory Points')
+    
     
     changePlayer = (j,r) ->
         window.players[j].canAttack = false   
@@ -155,14 +176,17 @@ $ ->
 
         window.currentPlayer++         
         if(window.currentPlayer > window.players.length)
-            console.log('Concluding Round '+window.currentRound)
+            console.log('*********')
+            console.log('********* Concluding Round '+window.currentRound)
+            console.log('*********')
             window.currentRound++
             
             if window.currentRound > window.gameRounds
-                console.log('Game over')
+                declareWinner()
             else
-                console.log('Starting Round '+window.currentRound)
-                
+                console.log('*********')
+                console.log('********* Starting Round '+window.currentRound)
+                console.log('*********')
                 window.currentPlayer = 1
                 j = window.currentPlayer-1
                 console.log('Current player is '+window.players[j].name+'.')
@@ -279,7 +303,7 @@ $ ->
                 else if window.players[j].civilizations[r].power.name == 'Flying'
                     window.players[j].canAttack = attackTerritory(j,r,index)
                 else
-                    console.log('You must chose a territory on the edge.')
+                    console.log('----You must chose a territory on the edge.')
                 return true
             
 
@@ -291,7 +315,7 @@ $ ->
             else if window.players[j].civilizations[r].power.name == 'Flying'
                 window.players[j].canAttack = attackTerritory(j,r,index)
             else
-                console.log('That territory is not adjacent.') 
+                console.log('----That territory is not adjacent.') 
                 return true
         
 

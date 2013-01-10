@@ -5,7 +5,7 @@ $(function() {
            Global Variables
   */
 
-  var aiTurn, attackTerritory, calculateVictoryPoints, changePlayer, checkAI, claimTerritory, debugTerritories, gatherTokens, i, item, pickRacePower, prepForTurn, setPlayerTable, setTerritoryForPlayer, showRacePowerStack, territoryAttack, updatePlayerTokens, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2,
+  var aiTurn, attackTerritory, calculateVictoryPoints, changePlayer, checkAI, claimTerritory, debugTerritories, declareWinner, gatherTokens, getAttackStrength, i, item, pickRacePower, prepForTurn, setPlayerTable, setTerritoryForPlayer, showRacePowerStack, territoryAttack, updatePlayerTokens, _i, _j, _k, _len, _len1, _len2, _ref, _ref1, _ref2,
     _this = this;
   window.gameRounds = 10;
   window.currentRound = 1;
@@ -20,7 +20,6 @@ $(function() {
   aiTurn = function() {
     var attack, j, pick, r, race;
     if (window.currentRound > window.gameRounds) {
-      console.log('Game over');
       return false;
     } else {
       j = window.currentPlayer - 1;
@@ -92,8 +91,12 @@ $(function() {
       checkAI(next);
       return false;
     }
+    if (window.territories[index].playerId === j && window.territories[index].playerCivilization === r) {
+      console.log('----You cannot attack territory of the same race');
+      return true;
+    }
     console.log(window.players[j].name + ' Current Tokens: ', window.players[j].civilizations[r].totalTokens);
-    needed = window.territories[index].tokensNeeded();
+    needed = getAttackStrength(window.territories[index], j, r);
     console.log('Number of Tokens needed to attack', needed);
     console.log(window.players[j].name + ' is attacking territory: ' + window.territories[index].id);
     console.log('  Type is: ' + window.territories[index].type);
@@ -129,12 +132,34 @@ $(function() {
       }
     }
   };
+  getAttackStrength = function(territory, j, r) {
+    var points;
+    points = territory.tokensNeeded();
+    points += window.players[j].civilizations[r].race.attackStrength(territory, j);
+    points += window.players[j].civilizations[r].power.attackStrength(territory, j);
+    return points;
+  };
   checkAI = function(j) {
     if (window.players[j].playerType === 'ai') {
       aiTurn();
       return true;
     }
     return false;
+  };
+  declareWinner = function() {
+    var i, item, winnerName, winnerTotal, _i, _len, _ref;
+    console.log('The game is over');
+    winnerTotal = 0;
+    winnerName = '';
+    _ref = window.players;
+    for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+      item = _ref[i];
+      if (item.victoryPoints > 0) {
+        winnerTotal = item.victoryPoints;
+        winnerName = item.name;
+      }
+    }
+    return console.log(winnerName + ' won with ' + winnerTotal + ' Victory Points');
   };
   changePlayer = function(j, r) {
     window.players[j].canAttack = false;
@@ -143,12 +168,16 @@ $(function() {
     console.log(window.players[j].name + ' has completed their turn.');
     window.currentPlayer++;
     if (window.currentPlayer > window.players.length) {
-      console.log('Concluding Round ' + window.currentRound);
+      console.log('*********');
+      console.log('********* Concluding Round ' + window.currentRound);
+      console.log('*********');
       window.currentRound++;
       if (window.currentRound > window.gameRounds) {
-        console.log('Game over');
+        declareWinner();
       } else {
-        console.log('Starting Round ' + window.currentRound);
+        console.log('*********');
+        console.log('********* Starting Round ' + window.currentRound);
+        console.log('*********');
         window.currentPlayer = 1;
         j = window.currentPlayer - 1;
         console.log('Current player is ' + window.players[j].name + '.');
@@ -266,7 +295,7 @@ $(function() {
         } else if (window.players[j].civilizations[r].power.name === 'Flying') {
           window.players[j].canAttack = attackTerritory(j, r, index);
         } else {
-          console.log('You must chose a territory on the edge.');
+          console.log('----You must chose a territory on the edge.');
         }
         return true;
       }
@@ -278,7 +307,7 @@ $(function() {
       } else if (window.players[j].civilizations[r].power.name === 'Flying') {
         return window.players[j].canAttack = attackTerritory(j, r, index);
       } else {
-        console.log('That territory is not adjacent.');
+        console.log('----That territory is not adjacent.');
         return true;
       }
     }
