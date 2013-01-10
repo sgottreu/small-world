@@ -50,3 +50,34 @@ window.colorTerritory = (color, poly) ->
     ctx.fill()
     return true    
     
+window.clone = (obj) ->
+
+    if (null == obj || "object" != typeof obj) 
+        return obj;
+
+
+    if (obj instanceof Date) 
+        copy = new Date();
+        copy.setTime(obj.getTime())
+        return copy;
+    
+
+    if (obj instanceof Array) 
+        copy = [];
+        for  i  in [0..obj.length]
+            copy[i] = clone(obj[i])
+        
+        return copy;
+    
+
+    if (obj instanceof Object) 
+        copy = {};
+        for attr of obj
+            if (obj.hasOwnProperty(attr)) 
+                copy[attr] = window.clone(obj[attr])        
+        return copy;
+    
+
+    throw new Error("Unable to copy obj! Its type isn't supported.");
+
+    

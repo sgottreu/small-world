@@ -5,10 +5,11 @@ $ ->
     
     ###
 
-    window.gameRound = 10
+    window.gameRounds = 10
     window.currentRound = 1
     window.currentPlayer = 1
     window.canPickRace = true
+    window.currentTerritory = false
     
     ###
     
@@ -17,30 +18,52 @@ $ ->
     ###
     
     aiTurn = () ->
-        j = window.currentPlayer-1
-    
-        if window.window.players[j].canPickRace
-            race = Math.floor((Math.random() * 6) + 1)
-            
-            while window.racePowerStack[race] == null
-                race = Math.floor((Math.random() * 6) + 1)
-            pickRacePower(race)
-            
-        r = window.players[j].civilizations.length-1
-        attack = window.players[j].canAttack
-        while window.players[j].canAttack == true
+        if window.currentRound > window.gameRounds
+            console.log('Game over')
+            return false
+        else
+            j = window.currentPlayer-1
         
-            pick = Math.floor((Math.random() * (window.territories.length-1)) + 1)         
-            attack = territoryAttack(j,r,pick)
-            if attack == false then break
-
-        return 
+            if window.window.players[j].canPickRace
+                race = Math.floor((Math.random() * 6) + 1)
+                
+                while window.racePowerStack[race] == null
+                    race = Math.floor((Math.random() * 6) + 1)
+                pickRacePower(race)
+                
+            r = window.players[j].civilizations.length-1
+            attack = window.players[j].canAttack
+            while window.players[j].canAttack == true
+            
+                pick = Math.floor((Math.random() * (window.territories.length-1)) + 1)         
+                attack = territoryAttack(j,r,pick)
+                if attack == false then break
+    
+            return
+        
     
     updatePlayerTokens = (j,r,needed) ->
+        other = window.currentTerritory
+    
+    
         window.players[j].civilizations[r].totalTokens = window.players[j].civilizations[r].totalTokens - needed
         $("#playerTable tbody").find('[data-id="'+j+'"]').find('[data-td="tokens"]').html(window.players[j].civilizations[r].totalTokens)
         
         window.players[j].civilizations[r].startRound = false
+        
+        
+        
+        if(other.playerId != false)
+            if !window.players[other.playerId].civilizations[other.playerCivilization].race.inDecline
+                console.log(window.players[other.playerId].name+' currently has '+window.players[other.playerId].civilizations[other.playerCivilization].totalTokens+' tokens')
+                if window.players[other.playerId].civilizations[other.playerCivilization].race.name == 'Elves'
+                    console.log('Returning '+other.playerTokens+' tokens to '+window.players[other.playerId].name)
+                    window.players[other.playerId].civilizations[other.playerCivilization].totalTokens += other.playerTokens
+                else
+                    console.log('Returning '+other.playerTokens+' tokens to '+window.players[other.playerId].name+ ' - 1')
+                    window.players[other.playerId].civilizations[other.playerCivilization].totalTokens += (other.playerTokens - 1)
+                console.log(window.players[other.playerId].name+' now has '+window.players[other.playerId].civilizations[other.playerCivilization].totalTokens+' tokens')
+            
 
         
     claimTerritory = (j,index) ->
@@ -62,6 +85,7 @@ $ ->
     setTerritoryForPlayer = (j,r,index,tokens) ->
         window.territories[index].playerTokens = tokens
         window.territories[index].playerId = j
+        window.territories[index].playerCivilization = r
         ###
         window.territories[index].nonEmpty[j] = true
         ###
@@ -69,7 +93,7 @@ $ ->
   
         
     attackTerritory = (j,r,index) ->
-        
+        window.currentTerritory = window.clone(window.territories[index])
     
         if window.players[j].civilizations[r].totalTokens == 0
             next = changePlayer(j,r)
@@ -105,7 +129,7 @@ $ ->
                     setTerritoryForPlayer(j,r,index,window.players[j].civilizations[r].totalTokens)
                     console.log('Roll was successful.')
                     claimTerritory(j,index)
-                    updatePlayerTokens(j,r,window.players[j].civilizations[r].totalTokens)  
+                    updatePlayerTokens(j,r,window.players[j].civilizations[r].totalTokens)
                     next = changePlayer(j,r)
                     checkAI(next)              
                     return true
@@ -134,7 +158,7 @@ $ ->
             console.log('Concluding Round '+window.currentRound)
             window.currentRound++
             
-            if window.currentRound > window.gameRound
+            if window.currentRound > window.gameRounds
                 console.log('Game over')
             else
                 console.log('Starting Round '+window.currentRound)
@@ -153,6 +177,9 @@ $ ->
     
     calculateVictoryPoints = (j,r) ->
         nonEmpty = 0
+        console.log('*********')
+        console.log('********* Calculating Score')
+        console.log('*********')
         for item, i in window.territories
             if item.playerId == j
                 window.players[j].victoryPoints++
@@ -161,7 +188,10 @@ $ ->
                 window.players[j].victoryPoints += window.players[j].civilizations[r].race.checkVictoryPoints(item,j)
 
         $("#playerTable tbody").find('[data-id="'+j+'"]').find('td:eq(1)').html(window.players[j].victoryPoints)
-    
+        
+        console.log('*********')
+        console.log('********* Begin Next Player')
+        console.log('*********')
         
     prepForTurn = (j,r) ->
         gatherTokens(j,r)

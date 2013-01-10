@@ -48,3 +48,32 @@ window.colorTerritory = function(color, poly) {
   ctx.fill();
   return true;
 };
+
+window.clone = function(obj) {
+  var attr, copy, i, _i, _ref;
+  if (null === obj || "object" !== typeof obj) {
+    return obj;
+  }
+  if (obj instanceof Date) {
+    copy = new Date();
+    copy.setTime(obj.getTime());
+    return copy;
+  }
+  if (obj instanceof Array) {
+    copy = [];
+    for (i = _i = 0, _ref = obj.length; 0 <= _ref ? _i <= _ref : _i >= _ref; i = 0 <= _ref ? ++_i : --_i) {
+      copy[i] = clone(obj[i]);
+    }
+    return copy;
+  }
+  if (obj instanceof Object) {
+    copy = {};
+    for (attr in obj) {
+      if (obj.hasOwnProperty(attr)) {
+        copy[attr] = window.clone(obj[attr]);
+      }
+    }
+    return copy;
+  }
+  throw new Error("Unable to copy obj! Its type isn't supported.");
+};

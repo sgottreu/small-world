@@ -116,6 +116,9 @@ class Underworld extends Power
         else 
             adjusted = points
         adjusted
+        
+    checkVictoryPoints: (territory, j) ->
+        super 0
     
 class Wealthy extends Power 
     set: ->

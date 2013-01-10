@@ -25,6 +25,7 @@ class Territory
         @playerTokens = 0
         @playerId = false
         @playerTerritory = false
+        @playerCivilization = false
         @nonEmpty = new Array()
     
         for key, value of @data

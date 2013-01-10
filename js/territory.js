@@ -28,6 +28,7 @@ Territory = (function() {
     this.playerTokens = 0;
     this.playerId = false;
     this.playerTerritory = false;
+    this.playerCivilization = false;
     this.nonEmpty = new Array();
     _ref = this.data;
     for (key in _ref) {

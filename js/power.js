@@ -404,6 +404,10 @@ Underworld = (function(_super) {
     return adjusted;
   };
 
+  Underworld.prototype.checkVictoryPoints = function(territory, j) {
+    return Underworld.__super__.checkVictoryPoints.call(this, 0);
+  };
+
   return Underworld;
 
 })(Power);
