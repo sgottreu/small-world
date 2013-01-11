@@ -24,3 +24,21 @@ img.clear {
 
 #territoryTable {
   margin-top: 10px; }
+
+div.civs {
+  width: 402px;
+  text-align: center; }
+  div.civs div.race-power {
+    min-width: 200px;
+    float: left;
+    border-right: 1px solid black; }
+  div.civs div.tokens {
+    min-width: 100px;
+    float: left;
+    border-right: 1px solid black; }
+  div.civs div.decline {
+    width: 100px;
+    float: left; }
+
+div.civs[data-civid="header"] div {
+  border-bottom: 1px solid black; }

@@ -216,10 +216,12 @@ $(function() {
     }
   };
   setPlayerTable = function(item, i) {
-    $("#playerTable").find('tbody:last').append('<tr data-id="' + i + '"><td>' + item.name + '</td><td>' + item.victoryPoints + '</td><td data-td="race_power"></td><td data-td="tokens"></td></tr>');
+    var html;
+    html = '<tr data-id="' + i + '"><td>' + item.name + '</td><td>' + item.victoryPoints + '</td><td data-td="civs">' + '<div class="civs" data-civid="header"><div class="race-power">Race-Power</div><div class="tokens">Tokens</div>' + '<div class="decline">Decline</div></div></td></tr>';
+    $("#playerTable").find('tbody:last').append(html);
   };
   pickRacePower = function(row) {
-    var i, id, item, j, _i, _len, _ref;
+    var html, i, id, item, j, r, _i, _len, _ref;
     j = window.currentPlayer - 1;
     if (window.players[j].playerType === 'ai') {
       row = $("#card-stack tbody").find('[data-id="' + row + '"]');
@@ -247,8 +249,11 @@ $(function() {
     window.players[j].victoryPoints += window.racePowerStack[id].points;
     window.racePowerStack[id].points = 0;
     window.players[j].civilizations.push(window.racePowerStack[id]);
-    $("#playerTable tbody").find('[data-id="' + j + '"]').find('[data-td="race_power"]').html(window.racePowerStack[id].race.name + ' - ' + window.racePowerStack[id].power.name);
-    $("#playerTable tbody").find('[data-id="' + j + '"]').find('td:last').html(window.racePowerStack[id].totalTokens);
+    r = window.players[j].civilizations.length - 1;
+    html = '<div class="civs" data-civid="' + r + '"><div class="race-power" data-td="race_power">&nbsp;</div>' + '<div class="tokens" data-td="tokens">&nbsp;</div><div class="decline" data-td="decline">' + '<button data-declineid="' + r + '" class="decline">Decline</button></div></div>';
+    $("#playerTable tbody").find('[data-id="' + j + '"]').find('[data-td="civs"]').append(html);
+    $("#playerTable tbody").find('[data-id="' + j + '"]').find('[data-civid="' + r + '"]').find('[data-td="race_power"]').html(window.racePowerStack[id].race.name + ' - ' + window.racePowerStack[id].power.name);
+    $("#playerTable tbody").find('[data-id="' + j + '"]').find('[data-civid="' + r + '"]').find('[data-td="tokens"]').html(window.racePowerStack[id].totalTokens);
     console.log(window.players[j].name + ' has chosen as their race: ' + window.racePowerStack[id].race.name);
     console.log(window.players[j].name + ' has chosen as their power: ' + window.racePowerStack[id].power.name);
     $("#card-stack tbody tr:eq(5)").next().show();

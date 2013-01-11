@@ -223,10 +223,12 @@ $ ->
     
     
     setPlayerTable = (item, i) ->
-        $("#playerTable").find('tbody:last').append('<tr data-id="'+i+'"><td>'+item.name+'</td><td>'+item.victoryPoints+'</td><td data-td="race_power"></td><td data-td="tokens"></td></tr>')
+        html = '<tr data-id="'+i+'"><td>'+item.name+'</td><td>'+item.victoryPoints+'</td><td data-td="civs">' + '<div class="civs" data-civid="header"><div class="race-power">Race-Power</div><div class="tokens">Tokens</div>'+ '<div class="decline">Decline</div></div></td></tr>'
+    
+        $("#playerTable").find('tbody:last').append(html)
+
         return
     
-
     pickRacePower = (row) =>
         
         j = window.currentPlayer-1
@@ -254,9 +256,16 @@ $ ->
         window.players[j].victoryPoints += window.racePowerStack[id].points
         window.racePowerStack[id].points = 0
         window.players[j].civilizations.push(window.racePowerStack[id])
+        r = window.players[j].civilizations.length - 1
         
-        $("#playerTable tbody").find('[data-id="'+j+'"]').find('[data-td="race_power"]').html(window.racePowerStack[id].race.name + ' - ' + window.racePowerStack[id].power.name)
-        $("#playerTable tbody").find('[data-id="'+j+'"]').find('td:last').html(window.racePowerStack[id].totalTokens)
+        
+        html = '<div class="civs" data-civid="'+r+'"><div class="race-power" data-td="race_power">&nbsp;</div>'+                 '<div class="tokens" data-td="tokens">&nbsp;</div><div class="decline" data-td="decline">'+                 '<button data-declineid="'+r+'" class="decline">Decline</button></div></div>'
+        
+        
+        $("#playerTable tbody").find('[data-id="'+j+'"]').find('[data-td="civs"]').append(html)
+        
+        $("#playerTable tbody").find('[data-id="'+j+'"]').find('[data-civid="'+r+'"]').find('[data-td="race_power"]').html(window.racePowerStack[id].race.name + ' - ' + window.racePowerStack[id].power.name)
+        $("#playerTable tbody").find('[data-id="'+j+'"]').find('[data-civid="'+r+'"]').find('[data-td="tokens"]').html(window.racePowerStack[id].totalTokens)
         
         console.log(window.players[j].name + ' has chosen as their race: '+ window.racePowerStack[id].race.name)
         console.log(window.players[j].name + ' has chosen as their power: '+ window.racePowerStack[id].power.name)
@@ -268,32 +277,34 @@ $ ->
         window.window.players[j].canPickRace = false
         
         
-    territoryAttack = (j,r,index) =>
+    territoryAttack = (j,r,index) ->
         if window.players[j].civilizations[r].startRound
-            
             if window.territories[index].edgeBorder && !window.territories[index].isWater
-                window.players[j].canAttack = attackTerritory(j,r,index)
+                return window.players[j].canAttack = attackTerritory(j,r,index)
             else
                 if window.territories[index].edgeBorder && window.territories[index].isWater && window.players[j].civilizations[r].power.name == 'Seafaring' 
-                    window.players[j].canAttack = attackTerritory(j,r,index)
-                else if window.players[j].civilizations[r].power.name == 'Flying'
-                    window.players[j].canAttack = attackTerritory(j,r,index)
+                    return window.players[j].canAttack = attackTerritory(j,r,index)
+                else if window.players[j].civilizations[r].power.name == 'Flying' || if window.players[j].civilizations[r].race.name == 'Halflings'
+                    attack = window.players[j].canAttack = attackTerritory(j,r,index)
+                
+                    if window.players[j].civilizations[r].race.name == 'Halflings' && window.players[j].civilizations[r].race.holeInTheGrounds > 0
+                        window.territories[index].holeInTheGround = true
+                        window.players[j].civilizations[r].race.holeInTheGrounds = window.players[j].civilizations[r].race.holeInTheGround - 1
+                        
+                    return attack
                 else
                     console.log('You must chose a territory on the edge.')
-                return true
-            
-
+                    return true
         else
             if window.territories[index].isAdjacent(window.players[j].territory) && !window.territories[index].isWater
-                window.players[j].canAttack = attackTerritory(j,r,index)
+                return window.players[j].canAttack = attackTerritory(j,r,index)
             else if window.territories[index].edgeBorder && window.territories[index].isWater && window.players[j].civilizations[r].power.name == 'Seafaring' 
-                window.players[j].canAttack = attackTerritory(j,r,index)
+                return window.players[j].canAttack = attackTerritory(j,r,index)
             else if window.players[j].civilizations[r].power.name == 'Flying'
-                window.players[j].canAttack = attackTerritory(j,r,index)
+                return window.players[j].canAttack = attackTerritory(j,r,index)
             else
-                console.log('That territory is not adjacent.') 
+                console.log('That territory is not adjacent.')                 
                 return true
-        
 
     debugTerritories = (index,start) ->
         html = '<td>' + window.territories[index].id + '</td>'

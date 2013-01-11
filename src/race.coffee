@@ -46,6 +46,9 @@ class Giants extends Race
     checkVictoryPoints: (territory, j) ->  
         super 0
 class Halflings extends Race 
+    constructor: (@data) ->
+        @holeInTheGrounds=2
+
     checkVictoryPoints: (territory, j) ->  
         super 0
 class Humans extends Race 
