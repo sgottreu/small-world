@@ -278,41 +278,54 @@ $ ->
         
         
     territoryAttack = (j,r,index) ->
+        if window.territories[index].holeInTheGround
+            return window.players[j].canAttack
+    
         if window.players[j].civilizations[r].startRound
             if window.territories[index].edgeBorder && !window.territories[index].isWater
-                return window.players[j].canAttack = attackTerritory(j,r,index)
+                window.players[j].canAttack = attackTerritory(j,r,index)
+                if window.players[j].civilizations[r].race.name == 'Halflings' && window.players[j].civilizations[r].race.holeInTheGrounds > 0
+                    window.territories[index].holeInTheGround = true
+                    window.players[j].civilizations[r].race.holeInTheGrounds = window.players[j].civilizations[r].race.holeInTheGrounds - 1
+                
+                return window.players[j].canAttack
             else
                 if window.territories[index].edgeBorder && window.territories[index].isWater && window.players[j].civilizations[r].power.name == 'Seafaring' 
-                    return window.players[j].canAttack = attackTerritory(j,r,index)
-                else if window.players[j].civilizations[r].power.name == 'Flying' || if window.players[j].civilizations[r].race.name == 'Halflings'
-                    attack = window.players[j].canAttack = attackTerritory(j,r,index)
-                
-                    if window.players[j].civilizations[r].race.name == 'Halflings' && window.players[j].civilizations[r].race.holeInTheGrounds > 0
-                        window.territories[index].holeInTheGround = true
-                        window.players[j].civilizations[r].race.holeInTheGrounds = window.players[j].civilizations[r].race.holeInTheGround - 1
-                        
-                    return attack
+                    window.players[j].canAttack = attackTerritory(j,r,index)
+                    return window.players[j].canAttack
+                else if window.players[j].civilizations[r].power.name == 'Flying'
+                    window.players[j].canAttack = attackTerritory(j,r,index)
+                    return window.players[j].canAttack
+                else if window.players[j].civilizations[r].race.name == 'Halflings' && window.players[j].civilizations[r].race.holeInTheGrounds == 2
+                    window.players[j].canAttack = attackTerritory(j,r,index)
+                    window.territories[index].holeInTheGround = true
+                    window.players[j].civilizations[r].race.holeInTheGrounds = window.players[j].civilizations[r].race.holeInTheGrounds - 1            
                 else
                     console.log('You must chose a territory on the edge.')
                     return true
         else
             if window.territories[index].isAdjacent(window.players[j].territory) && !window.territories[index].isWater
-                return window.players[j].canAttack = attackTerritory(j,r,index)
+                window.players[j].canAttack = attackTerritory(j,r,index)
+                if window.players[j].civilizations[r].race.name == 'Halflings' && window.players[j].civilizations[r].race.holeInTheGrounds > 0
+                    window.territories[index].holeInTheGround = true
+                    window.players[j].civilizations[r].race.holeInTheGrounds = window.players[j].civilizations[r].race.holeInTheGrounds - 1
             else if window.territories[index].edgeBorder && window.territories[index].isWater && window.players[j].civilizations[r].power.name == 'Seafaring' 
-                return window.players[j].canAttack = attackTerritory(j,r,index)
+                window.players[j].canAttack = attackTerritory(j,r,index)
             else if window.players[j].civilizations[r].power.name == 'Flying'
-                return window.players[j].canAttack = attackTerritory(j,r,index)
-            else
+                window.players[j].canAttack = attackTerritory(j,r,index)
+            else 
                 console.log('That territory is not adjacent.')                 
-                return true
+            return window.players[j].canAttack
+
 
     debugTerritories = (index,start) ->
+        accoutrements = getAccoutrements(index)
         html = '<td>' + window.territories[index].id + '</td>'
         html += '<td>'+window.territories[index].playerId+'</td>'
         html += '<td>'+window.territories[index].totalTokens+'</td>'
         html += '<td>'+window.territories[index].playerTokens+'</td>'
         html += '<td>'+window.territories[index].type+'</td>'
-        
+        html += '<td>'+accoutrements+'</td>'
         
         if start == true
             for item, i in window.players 
@@ -324,6 +337,23 @@ $ ->
         else
             $("#territoryTable tbody").find('[data-id="'+index+'"]').html(html)
         return
+        
+    getAccoutrements = (index) ->
+        html = ''
+        if window.territories[index].lair
+            html += 'Lair<br>'
+        if window.territories[index].fort
+            html += 'Fort<br>'
+        if window.territories[index].biovauk
+            html += 'biovauk x '+window.territories[index].numBiovauk+'<br>'
+        if window.territories[index].herioc
+            html += 'herioc<br>'
+        if window.territories[index].dragon
+            html += 'dragon<br>'
+        if window.territories[index].holeInTheGround
+            html += 'holeInTheGround<br>'
+    
+        return html
         
     ###
     

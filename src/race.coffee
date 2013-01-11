@@ -47,7 +47,7 @@ class Giants extends Race
         super 0
 class Halflings extends Race 
     constructor: (@data) ->
-        @holeInTheGrounds=2
+        super @data
 
     checkVictoryPoints: (territory, j) ->  
         super 0
@@ -86,7 +86,7 @@ window.races = [
     new Sorcerers {name:'Sorcerers', totalAvailTokens:18, startingTokens:5}
     new Tritons {name:'Tritons', totalAvailTokens:11, startingTokens:6}
     new Giants {name:'Giants', totalAvailTokens:11, startingTokens:6}
-    new Halflings {name:'Halflings', totalAvailTokens:11, startingTokens:6}
+    new Halflings {name:'Halflings', totalAvailTokens:11, startingTokens:6, holeInTheGrounds : 2}
     new Humans {name:'Humans', totalAvailTokens:10, startingTokens:5}
     new Orcs {name:'Orcs', totalAvailTokens:10, startingTokens:5}
     new Trolls {name:'Trolls', totalAvailTokens:10, startingTokens:5}

@@ -183,8 +183,9 @@ Halflings = (function(_super) {
 
   __extends(Halflings, _super);
 
-  function Halflings() {
-    return Halflings.__super__.constructor.apply(this, arguments);
+  function Halflings(data) {
+    this.data = data;
+    Halflings.__super__.constructor.call(this, this.data);
   }
 
   Halflings.prototype.checkVictoryPoints = function(territory, j) {
@@ -314,7 +315,8 @@ window.races = [
   }), new Halflings({
     name: 'Halflings',
     totalAvailTokens: 11,
-    startingTokens: 6
+    startingTokens: 6,
+    holeInTheGrounds: 2
   }), new Humans({
     name: 'Humans',
     totalAvailTokens: 10,
