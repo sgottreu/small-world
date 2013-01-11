@@ -1,4 +1,12 @@
 
+window.debug = true;
+
+/*
+  # Adapted from the javascript implementation at http://sedition.com/perl/javascript-fy.html
+  # Randomizes the order of elements in the passed in array in place.
+*/
+
+
 window.fisherYates = function(arr) {
   var i, j, tempi, tempj;
   i = arr.length;

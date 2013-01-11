@@ -1,6 +1,9 @@
-# Adapted from the javascript implementation at http://sedition.com/perl/javascript-fy.html
- 
-# Randomizes the order of elements in the passed in array in place.
+window.debug = true
+
+###
+  # Adapted from the javascript implementation at http://sedition.com/perl/javascript-fy.html
+  # Randomizes the order of elements in the passed in array in place.
+###
 window.fisherYates = (arr) ->
     i = arr.length;
     if i == 0 then return false

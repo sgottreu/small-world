@@ -152,6 +152,10 @@ Skeletons = (function(_super) {
     return Skeletons.__super__.attackStrength.call(this, 0);
   };
 
+  Skeletons.prototype.addTokens = function() {
+    return 0;
+  };
+
   Skeletons.prototype.checkVictoryPoints = function(territory, j) {
     return Skeletons.__super__.checkVictoryPoints.call(this, 0);
   };
@@ -237,20 +241,17 @@ Halflings = (function(_super) {
     Halflings.__super__.constructor.call(this, this.data);
   }
 
-  Halflings.prototype.checkVictoryPoints = function(territory, j) {};
+  Halflings.prototype.attackStrength = function(territory, j) {
+    return Halflings.__super__.attackStrength.call(this, 0);
+  };
+
+  Halflings.prototype.checkVictoryPoints = function(territory, j) {
+    return Halflings.__super__.checkVictoryPoints.call(this, 0);
+  };
 
   return Halflings;
 
 })(Race);
-
-({
-  attackStrength: function(territory, j) {
-    return attackStrength.__super__.constructor.call(this, 0);
-  },
-  checkVictoryPoints: function(territory, j) {
-    return checkVictoryPoints.__super__.constructor.call(this, 0);
-  }
-});
 
 Humans = (function(_super) {
 
@@ -349,7 +350,12 @@ Wizards = (function(_super) {
 })(Race);
 
 window.races = [
-  new Amazons({
+  new Halflings({
+    name: 'Halflings',
+    totalAvailTokens: 11,
+    startingTokens: 6,
+    holeInTheGrounds: 2
+  }), new Amazons({
     name: 'Amazons',
     totalAvailTokens: 15,
     startingTokens: 6
@@ -357,6 +363,10 @@ window.races = [
     name: 'Dwarves',
     totalAvailTokens: 8,
     startingTokens: 3
+  }), new Trolls({
+    name: 'Trolls',
+    totalAvailTokens: 10,
+    startingTokens: 5
   }), new Elves({
     name: 'Elves',
     totalAvailTokens: 11,
@@ -385,21 +395,12 @@ window.races = [
     name: 'Giants',
     totalAvailTokens: 11,
     startingTokens: 6
-  }), new Halflings({
-    name: 'Halflings',
-    totalAvailTokens: 11,
-    startingTokens: 6,
-    holeInTheGrounds: 2
   }), new Humans({
     name: 'Humans',
     totalAvailTokens: 10,
     startingTokens: 5
   }), new Orcs({
     name: 'Orcs',
-    totalAvailTokens: 10,
-    startingTokens: 5
-  }), new Trolls({
-    name: 'Trolls',
     totalAvailTokens: 10,
     startingTokens: 5
   }), new Wizards({
@@ -409,4 +410,8 @@ window.races = [
   })
 ];
 
-window.raceStack = window.fisherYates(window.races);
+if (window.debug) {
+  window.raceStack = window.races;
+} else {
+  window.raceStack = window.fisherYates(window.races);
+}

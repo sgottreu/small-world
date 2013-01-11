@@ -25,7 +25,11 @@ $(function() {
     } else {
       j = window.currentPlayer - 1;
       if (window.window.players[j].canPickRace) {
-        race = Math.floor((Math.random() * 6) + 1);
+        if (window.debug) {
+          race = 0;
+        } else {
+          race = Math.floor((Math.random() * 6) + 1);
+        }
         while (window.racePowerStack[race] === null) {
           race = Math.floor((Math.random() * 6) + 1);
         }
@@ -78,10 +82,10 @@ $(function() {
     window.territories[index].playerTokens = tokens;
     window.territories[index].playerId = j;
     window.territories[index].playerCivilization = r;
-    /*
-            window.territories[index].nonEmpty[j] = true
-    */
-
+    window.territories[index].nonEmpty[j] = true;
+    if (window.players[j].civilizations[r].race.name === 'Trolls') {
+      window.territories[index].lair = true;
+    }
     return window.players[j].territory.push(window.territories[index]);
   };
   attackTerritory = function(j, r, index) {
@@ -293,6 +297,7 @@ $(function() {
   };
   territoryAttack = function(j, r, index) {
     if (window.territories[index].holeInTheGround) {
+      console.log('You can\'t attack a Hole in the Ground.');
       return window.players[j].canAttack;
     }
     if (window.players[j].civilizations[r].startRound) {

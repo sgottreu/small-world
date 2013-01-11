@@ -166,17 +166,19 @@ class Wealthy extends Power
         super 0
         
 window.powers = [
+    new Hill { name: 'Hill', coins: 1, territories: ['hill'], startingTokens: 4}
+    new Flying { name: 'Flying', startingTokens: 5}
     new Alchemist { name: 'Alchemist', coins: 2, perRound: true, startingTokens: 4}
     new Berserk { name: 'Berserk', startingTokens: 4}
     new Bivouacking { name: 'Bivouacking', startingTokens: 5}
     new Commando { name: 'Commando', startingTokens: 4}
     new Diplomat { name: 'Diplomat', startingTokens: 5}
     new DragonMaster { name: 'Dragon Master', startingTokens: 5}
-    new Flying { name: 'Flying', startingTokens: 5}
+
     new Forest { name: 'Forest', startingTokens: 4}
     new Fortified { name: 'Fortified', startingTokens: 3}
     new Heroic { name: 'Heroic', startingTokens: 5}
-    new Hill { name: 'Hill', coins: 1, territories: ['hill'], startingTokens: 4}
+
     new Merchant { name: 'Merchant', startingTokens: 2}
     new Mounted { name: 'Mounted', coins: 1, territories: ['hill', 'farm'], startingTokens: 5}
     new Pillaging { name: 'Pillaging', startingTokens: 5}
@@ -188,7 +190,10 @@ window.powers = [
     new Wealthy { name: 'Wealthy', startingTokens: 4}
 ]
 
-window.powerStack = window.fisherYates window.powers
+if window.debug
+    window.powerStack = window.powers
+else
+    window.powerStack = window.fisherYates window.powers
 
 window.racePowerStack = []
 

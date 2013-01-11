@@ -10,6 +10,7 @@ $ ->
     window.currentPlayer = 1
     window.canPickRace = true
     window.currentTerritory = false
+
     
     ###    
     
@@ -25,7 +26,10 @@ $ ->
             j = window.currentPlayer-1
         
             if window.window.players[j].canPickRace
-                race = Math.floor((Math.random() * 6) + 1)
+                if window.debug
+                    race = 0
+                else
+                    race = Math.floor((Math.random() * 6) + 1)
                 
                 while window.racePowerStack[race] == null
                     race = Math.floor((Math.random() * 6) + 1)
@@ -49,6 +53,7 @@ $ ->
         window.players[j].civilizations[r].totalTokens = window.players[j].civilizations[r].totalTokens - needed
         $("#playerTable tbody").find('[data-id="'+j+'"]').find('[data-td="tokens"]').html(window.players[j].civilizations[r].totalTokens)
         
+ 
         window.players[j].civilizations[r].startRound = false
         
         
@@ -86,9 +91,12 @@ $ ->
         window.territories[index].playerTokens = tokens
         window.territories[index].playerId = j
         window.territories[index].playerCivilization = r
-        ###
+        
         window.territories[index].nonEmpty[j] = true
-        ###
+        
+        if window.players[j].civilizations[r].race.name == 'Trolls'
+            window.territories[index].lair = true
+        
         window.players[j].territory.push(window.territories[index])
   
         
@@ -212,6 +220,8 @@ $ ->
                 window.players[j].victoryPoints += window.players[j].civilizations[r].power.checkVictoryPoints(item,j)
                 window.players[j].victoryPoints += window.players[j].civilizations[r].race.checkVictoryPoints(item,j)
 
+
+
         $("#playerTable tbody").find('[data-id="'+j+'"]').find('td:eq(1)').html(window.players[j].victoryPoints)
         
         console.log('*********')
@@ -304,6 +314,7 @@ $ ->
         
     territoryAttack = (j,r,index) ->
         if window.territories[index].holeInTheGround
+            console.log('You can\'t attack a Hole in the Ground.')
             return window.players[j].canAttack
     
         if window.players[j].civilizations[r].startRound

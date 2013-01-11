@@ -57,9 +57,11 @@ class Ratmen extends Race
 class Skeletons extends Race 
   attackStrength: (territory, j) ->
         super 0
+  addTokens: () ->
+        return 0
   checkVictoryPoints: (territory, j) ->
-  
         super 0  
+  
 class Sorcerers extends Race 
   attackStrength: (territory, j) ->
         super 0
@@ -83,15 +85,14 @@ class Giants extends Race
   
         super 0
 class Halflings extends Race 
-    constructor: (@data) ->
+  constructor: (@data) ->
         super @data
 
-    checkVictoryPoints: (territory, j) ->  
   attackStrength: (territory, j) ->
         super 0
-  checkVictoryPoints: (territory, j) ->
-  
+  checkVictoryPoints: (territory, j) ->  
         super 0
+        
 class Humans extends Race 
   attackStrength: (territory, j) ->
         super 0
@@ -130,8 +131,10 @@ class Wizards extends Race
 
 
 window.races = [
+    new Halflings {name:'Halflings', totalAvailTokens:11, startingTokens:6, holeInTheGrounds : 2}
     new Amazons {name:'Amazons', totalAvailTokens:15, startingTokens:6}
     new Dwarves {name:'Dwarves', totalAvailTokens:8, startingTokens:3}
+    new Trolls {name:'Trolls', totalAvailTokens:10, startingTokens:5}
     new Elves {name:'Elves', totalAvailTokens:11, startingTokens:6}
     new Ghouls {name:'Ghouls', totalAvailTokens:10, startingTokens:5}
     new Ratmen {name:'Ratmen', totalAvailTokens:13, startingTokens:8}
@@ -139,13 +142,16 @@ window.races = [
     new Sorcerers {name:'Sorcerers', totalAvailTokens:18, startingTokens:5}
     new Tritons {name:'Tritons', totalAvailTokens:11, startingTokens:6}
     new Giants {name:'Giants', totalAvailTokens:11, startingTokens:6}
-    new Halflings {name:'Halflings', totalAvailTokens:11, startingTokens:6, holeInTheGrounds : 2}
+
     new Humans {name:'Humans', totalAvailTokens:10, startingTokens:5}
     new Orcs {name:'Orcs', totalAvailTokens:10, startingTokens:5}
-    new Trolls {name:'Trolls', totalAvailTokens:10, startingTokens:5}
+
     new Wizards {name:'Wizards', totalAvailTokens:10, startingTokens:5}
 ]
-    
-window.raceStack = window.fisherYates window.races
+
+if window.debug    
+    window.raceStack = window.races
+else
+    window.raceStack = window.fisherYates window.races
 
 

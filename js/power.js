@@ -517,7 +517,15 @@ Wealthy = (function(_super) {
 })(Power);
 
 window.powers = [
-  new Alchemist({
+  new Hill({
+    name: 'Hill',
+    coins: 1,
+    territories: ['hill'],
+    startingTokens: 4
+  }), new Flying({
+    name: 'Flying',
+    startingTokens: 5
+  }), new Alchemist({
     name: 'Alchemist',
     coins: 2,
     perRound: true,
@@ -537,9 +545,6 @@ window.powers = [
   }), new DragonMaster({
     name: 'Dragon Master',
     startingTokens: 5
-  }), new Flying({
-    name: 'Flying',
-    startingTokens: 5
   }), new Forest({
     name: 'Forest',
     startingTokens: 4
@@ -549,11 +554,6 @@ window.powers = [
   }), new Heroic({
     name: 'Heroic',
     startingTokens: 5
-  }), new Hill({
-    name: 'Hill',
-    coins: 1,
-    territories: ['hill'],
-    startingTokens: 4
   }), new Merchant({
     name: 'Merchant',
     startingTokens: 2
@@ -590,7 +590,11 @@ window.powers = [
   })
 ];
 
-window.powerStack = window.fisherYates(window.powers);
+if (window.debug) {
+  window.powerStack = window.powers;
+} else {
+  window.powerStack = window.fisherYates(window.powers);
+}
 
 window.racePowerStack = [];
 
